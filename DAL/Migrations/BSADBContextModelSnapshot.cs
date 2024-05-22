@@ -35,17 +35,18 @@ namespace DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
@@ -56,45 +57,14 @@ namespace DAL.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
                     b.HasKey("AccountId");
 
                     b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("BusinessObjects.Cart", b =>
-                {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CartId"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("OrderDetailId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("OrderDetailId");
-
-                    b.HasIndex("ProductId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("BusinessObjects.Comment", b =>
@@ -146,6 +116,8 @@ namespace DAL.Migrations
 
                     b.HasKey("MessageId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("GroupId");
 
                     b.HasIndex("ManagerId");
@@ -177,6 +149,8 @@ namespace DAL.Migrations
 
                     b.HasKey("MessageGroupId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("ManagerId");
 
                     b.ToTable("MessageGroups");
@@ -190,6 +164,9 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -198,15 +175,81 @@ namespace DAL.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Payment")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("GrandTotal")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<double>("SubTotal")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TotalDiscount")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("OrderId");
 
+                    b.HasIndex("AccountId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("BusinessObjects.OrderContact", b =>
+                {
+                    b.Property<int>("OrdContacId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrdContacId"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("OrdContacId");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("OrderContacts");
                 });
 
             modelBuilder.Entity("BusinessObjects.OrderDetail", b =>
@@ -217,8 +260,23 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderDetailId"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("OrderDetailId");
 
@@ -245,6 +303,9 @@ namespace DAL.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -257,25 +318,35 @@ namespace DAL.Migrations
 
                     b.HasIndex("CreateBy");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("BusinessObjects.Product", b =>
                 {
                     b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductId"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("Discount")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("ProductCode")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -328,25 +399,6 @@ namespace DAL.Migrations
                     b.ToTable("ProductFeedbacks");
                 });
 
-            modelBuilder.Entity("BusinessObjects.Cart", b =>
-                {
-                    b.HasOne("BusinessObjects.OrderDetail", "OrderDetail")
-                        .WithMany("Carts")
-                        .HasForeignKey("OrderDetailId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BusinessObjects.Product", "Product")
-                        .WithOne("Cart")
-                        .HasForeignKey("BusinessObjects.Cart", "ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("OrderDetail");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BusinessObjects.Comment", b =>
                 {
                     b.HasOne("BusinessObjects.Post", "Post")
@@ -360,32 +412,70 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BusinessObjects.Message", b =>
                 {
+                    b.HasOne("BusinessObjects.Account", "Customer")
+                        .WithMany("CustomerMessages")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BusinessObjects.MessageGroup", "MessageGroup")
                         .WithMany("Messages")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BusinessObjects.Account", "Account")
-                        .WithMany("Messages")
+                    b.HasOne("BusinessObjects.Account", "Manager")
+                        .WithMany("ManagerMessages")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.Navigation("Customer");
+
+                    b.Navigation("Manager");
 
                     b.Navigation("MessageGroup");
                 });
 
             modelBuilder.Entity("BusinessObjects.MessageGroup", b =>
                 {
-                    b.HasOne("BusinessObjects.Account", "Account")
-                        .WithMany("MessageGroups")
+                    b.HasOne("BusinessObjects.Account", "Customer")
+                        .WithMany("CustomerGroups")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObjects.Account", "Manager")
+                        .WithMany("ManagerGroups")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("BusinessObjects.Order", b =>
+                {
+                    b.HasOne("BusinessObjects.Account", "Account")
+                        .WithMany("Orders")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("BusinessObjects.OrderContact", b =>
+                {
+                    b.HasOne("BusinessObjects.Order", "Order")
+                        .WithOne("OrderContact")
+                        .HasForeignKey("BusinessObjects.OrderContact", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("BusinessObjects.OrderDetail", b =>
@@ -407,7 +497,26 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BusinessObjects.Product", "Product")
+                        .WithMany("Posts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BusinessObjects.Product", b =>
+                {
+                    b.HasOne("BusinessObjects.OrderDetail", "OrderDetail")
+                        .WithOne("Product")
+                        .HasForeignKey("BusinessObjects.Product", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("BusinessObjects.ProductFeedback", b =>
@@ -439,9 +548,15 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BusinessObjects.Account", b =>
                 {
-                    b.Navigation("MessageGroups");
+                    b.Navigation("CustomerGroups");
 
-                    b.Navigation("Messages");
+                    b.Navigation("CustomerMessages");
+
+                    b.Navigation("ManagerGroups");
+
+                    b.Navigation("ManagerMessages");
+
+                    b.Navigation("Orders");
 
                     b.Navigation("Posts");
 
@@ -455,6 +570,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BusinessObjects.Order", b =>
                 {
+                    b.Navigation("OrderContact");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductFeedbacks");
@@ -462,7 +579,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BusinessObjects.OrderDetail", b =>
                 {
-                    b.Navigation("Carts");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BusinessObjects.Post", b =>
@@ -472,7 +589,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BusinessObjects.Product", b =>
                 {
-                    b.Navigation("Cart");
+                    b.Navigation("Posts");
 
                     b.Navigation("ProductFeedbacks");
                 });
