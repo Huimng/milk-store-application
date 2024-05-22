@@ -7,6 +7,7 @@ public class Message
     public string Content { get; set; }
     public int CustomerId { get; set; }
     public int ManagerId { get; set; }
-    public virtual Account? Account { get; set; }
+    public virtual Account? Customer { get; set; }
+    public virtual Account? Manager { get; set; }
     public virtual MessageGroup? MessageGroup { get; set; }
 }

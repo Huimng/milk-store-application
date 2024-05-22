@@ -1,32 +1,39 @@
-using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
+
 namespace DTO;
 
 public partial class BSADBContext : DbContext
 {
+    //public BSADBContext(DbContextOptions<BSADBContext> options) : base(options){}
+    //public BSADBContext() { }
+
     public DbSet<Account> Accounts { get; set; }
-    public DbSet<Cart> Carts { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<MessageGroup> MessageGroups { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<OrderContact> OrderContacts { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductFeedback> ProductFeedbacks { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Configure database provider and connection string
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=17011206;Integrated Security=true;");
-
+        optionsBuilder.UseNpgsql(
+            "Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=17011206;Integrated Security=true;");
     }
 }
+
 public partial class BSADBContext
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+       
         #region Account
+
         // Configure entity mappings and relationships
         modelBuilder.Entity<Account>(entity =>
         {
@@ -35,7 +42,7 @@ public partial class BSADBContext
             entity.Property(e => e.AccountId)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
-            
+
             // Configure properties
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -43,10 +50,15 @@ public partial class BSADBContext
 
             entity.Property(e => e.Email)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(32);
 
-            entity.Property(e => e.PasswordHash)
-                .IsRequired();
+            entity.Property(e => e.Username)
+                .IsRequired()
+                .HasMaxLength(32);
+
+            entity.Property(e => e.Password)
+                .IsRequired()
+                .HasMaxLength(64);
 
             entity.Property(e => e.Role)
                 .IsRequired();
@@ -60,9 +72,11 @@ public partial class BSADBContext
             entity.Property(e => e.UpdateDate)
                 .IsRequired();
         });
+
         #endregion
 
         #region Post
+
         // Configure Post entity
         modelBuilder.Entity<Post>(entity =>
         {
@@ -70,7 +84,7 @@ public partial class BSADBContext
             entity.Property(e => e.PostId)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
-            
+
             // Column lengths and configurations
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
@@ -81,10 +95,10 @@ public partial class BSADBContext
 
             entity.Property(e => e.CreateDate)
                 .IsRequired();
-            
+
             entity.Property(e => e.CreateBy)
                 .IsRequired();
-            
+
             entity.Property(e => e.Status)
                 .IsRequired();
 
@@ -93,11 +107,18 @@ public partial class BSADBContext
                 .WithMany(a => a.Posts)
                 .HasForeignKey(e => e.CreateBy)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Product)
+                .WithMany(e => e.Posts)
+                .HasForeignKey(e => e.ProductId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         });
+
         #endregion
 
         #region MessageGroup
+
         //Configure MessageGroup entity
         modelBuilder.Entity<MessageGroup>(entity =>
         {
@@ -121,21 +142,25 @@ public partial class BSADBContext
             entity.Property(e => e.Status)
                 .IsRequired();
 
-            entity.HasOne(e => e.Account)
-                .WithMany(a => a.MessageGroups)
+            entity.HasOne(e => e.Customer)
+                .WithMany(a => a.CustomerGroups)
                 .HasForeignKey(e => e.CustomerId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(a => a.AccountId);
 
-            entity.HasOne(e => e.Account)
-                .WithMany(a => a.MessageGroups)
+            entity.HasOne(e => e.Manager)
+                .WithMany(a => a.ManagerGroups)
                 .HasForeignKey(e => e.ManagerId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(a => a.AccountId);
         });
+
         #endregion
 
         #region Message
+
         // Configure MessageGroup entity
         modelBuilder.Entity<Message>(entity =>
         {
@@ -144,7 +169,7 @@ public partial class BSADBContext
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            
+
             // Column lengths and configurations
             entity.Property(e => e.Content)
                 .HasMaxLength(255)
@@ -152,7 +177,7 @@ public partial class BSADBContext
 
             entity.Property(e => e.GroupId)
                 .IsRequired();
-            
+
             entity.Property(e => e.CustomerId)
                 .IsRequired();
 
@@ -164,23 +189,26 @@ public partial class BSADBContext
                 .HasForeignKey(e => e.GroupId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-            
-            entity.HasOne(e => e.Account)
-                .WithMany(a => a.Messages)
+
+            entity.HasOne(e => e.Customer)
+                .WithMany(a => a.CustomerMessages)
                 .HasForeignKey(e => e.CustomerId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(k => k.AccountId);
 
-            entity.HasOne(e => e.Account)
-                .WithMany(a => a.Messages)
+            entity.HasOne(e => e.Manager)
+                .WithMany(a => a.ManagerMessages)
                 .HasForeignKey(e => e.ManagerId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(k => k.AccountId);
         });
 
         #endregion
 
         #region Comment
+
         // Configure Comment entity
         modelBuilder.Entity<Comment>(entity =>
         {
@@ -190,14 +218,14 @@ public partial class BSADBContext
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            
+
             // Column lengths and configurations
             entity.Property(e => e.Content)
                 .IsRequired();
-            
+
             entity.Property(e => e.CreateDate)
                 .IsRequired();
-            
+
             // Configure relationship with Post
             entity.HasOne(e => e.Post)
                 .WithMany(p => p.Comments)
@@ -209,11 +237,12 @@ public partial class BSADBContext
         #endregion
 
         #region ProductFeedback
+
         // Configure ProductFeedback entity
         modelBuilder.Entity<ProductFeedback>(entity =>
         {
             entity.HasKey(k => new { k.AccountId, k.ProductId, k.OrderId });
-            
+
             // Column lengths and configurations
             entity.Property(e => e.Comment)
                 .IsRequired();
@@ -226,17 +255,18 @@ public partial class BSADBContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.Order)
-                .WithMany(o=> o.ProductFeedbacks)
+                .WithMany(o => o.ProductFeedbacks)
                 .HasForeignKey(e => e.OrderId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.Product)
-                .WithMany(a=> a.ProductFeedbacks)
+                .WithMany(a => a.ProductFeedbacks)
                 .HasForeignKey(e => e.ProductId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
         #endregion
 
         #region OrderDetail
@@ -249,18 +279,81 @@ public partial class BSADBContext
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            
+            entity.Property(e => e.OrderId)
+                .IsRequired();
+
+            entity.Property(e => e.TotalPrice)
+                .IsRequired();
+
+            entity.Property(e => e.CreatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.ProductId)
+                .IsRequired();
+
             // Configure relationship with Order
             entity.HasOne(e => e.Order)
                 .WithMany(o => o.OrderDetails)
-                .HasForeignKey(e => e.OrderId)
+                .HasForeignKey(c => c.OrderId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure relationship with Product
+            entity.HasOne(e => e.Product)
+                .WithOne(o => o.OrderDetail)
+                .HasForeignKey<Product>(c => c.ProductId)
+                .IsRequired();
         });
 
         #endregion
-        
+
+        #region OrderContact
+
+        modelBuilder.Entity<OrderContact>(entity =>
+        {
+            entity.HasKey(e => e.OrdContacId);
+            entity.Property(e => e.OrdContacId)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            entity.Property(e => e.CustomerName)
+                .IsRequired();
+
+            entity.Property(e => e.Phone)
+                .IsRequired();
+
+            entity.Property(e => e.Province)
+                .IsRequired();
+
+            entity.Property(e => e.City)
+                .IsRequired();
+
+            entity.Property(e => e.District)
+                .IsRequired();
+
+            entity.Property(e => e.HouseNumber)
+                .IsRequired();
+
+            entity.Property(e => e.CreatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedDate)
+                .IsRequired();
+
+            // Define relationship with Order
+            entity.HasOne(oc => oc.Order)
+                .WithOne(o => o.OrderContact)
+                .HasForeignKey<OrderContact>(oc => oc.OrderId)
+                .IsRequired();
+        });
+
+        #endregion
+
         #region Order
+
         // Configure Order entity
         modelBuilder.Entity<Order>(entity =>
         {
@@ -269,70 +362,79 @@ public partial class BSADBContext
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            
-            // Column lengths and configurations
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(e => e.CartId)
+            entity.Property(e => e.Status)
                 .IsRequired();
+
+            entity.Property(e => e.TotalDiscount)
+                .IsRequired();
+
+            entity.Property(e => e.SubTotal)
+                .IsRequired();
+
+            entity.Property(e => e.GrandTotal)
+                .IsRequired();
+
+            entity.Property(e => e.CreatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.AccountId)
+                .IsRequired();
+
+            entity.Property(e => e.Type)
+                .IsRequired();
+
+            //Define relationship
+            entity.HasOne(e => e.Account)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(c => c.AccountId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         });
+
         #endregion
-        
+
         #region Product
+
         // Configure Product entity
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.ProductId);
-            
+
             // Column lengths and configurations
             entity.Property(e => e.ProductName)
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(e => e.Description)
+            entity.Property(e => e.ProductCode)
+                .HasMaxLength(255)
                 .IsRequired();
-            
-            entity.Property(e => e.Brand)
-                .HasMaxLength(255);
 
-            entity.Property(e => e.UrlImage)
-                .HasMaxLength(255); 
-        });
-        #endregion
-        
-        #region Cart
-        
-        // Configure Cart entity
-        modelBuilder.Entity<Cart>(entity =>
-        {
-            entity.HasKey(e => e.CartId);
-            entity.Property(e => e.CartId)
-                .ValueGeneratedOnAdd()
+            entity.Property(e => e.Description)
                 .IsRequired();
 
             entity.Property(e => e.Quantity)
                 .IsRequired();
-                
-            entity.Property(e => e.CreateDate)
+
+            entity.Property(e => e.Brand)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.UrlImage)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.Discount)
                 .IsRequired();
-            
-            // One-to-one relationship with Product
-            entity.HasOne(c => c.Product)
-                .WithOne(p => p.Cart)
-                .HasForeignKey<Cart>(c => c.ProductId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict); 
-            
-            // One-to-many relationship with OrderDetail
-            entity.HasOne(c => c.OrderDetail)
-                .WithMany(od => od.Carts)
-                .HasForeignKey(c => c.OrderDetailId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.Property(e => e.CreatedDate)
+                .IsRequired();
         });
-        
+
         #endregion
     }
 }
