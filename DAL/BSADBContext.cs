@@ -1,12 +1,15 @@
 using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
-    //public BSADBContext(DbContextOptions<BSADBContext> options) : base(options){}
-    //public BSADBContext() { }
+    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options){}
+    public BSADBContext() { }
+    public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -21,9 +24,12 @@ public partial class BSADBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Configure database provider and connection string
-        optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=BabyStore;Username=phucvinh;Password=12345;Integrated Security=true;");
+        var connectstring = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
 }
 
