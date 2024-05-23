@@ -1,7 +1,7 @@
 using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace DTO;
+namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
@@ -23,7 +23,7 @@ public partial class BSADBContext : DbContext
     {
         // Configure database provider and connection string
         optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=17011206;Integrated Security=true;");
+            "Host=localhost;Port=5432;Database=BabyStore;Username=phucvinh;Password=12345;Integrated Security=true;");
     }
 }
 
