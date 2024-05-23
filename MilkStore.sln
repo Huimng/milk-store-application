@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilkStore", "MilkStore\MilkStore.csproj", "{192B3191-BDED-4BA0-B3E8-C715E4BD3C31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MilkStore", "MilkStore\MilkStore.csproj", "{192B3191-BDED-4BA0-B3E8-C715E4BD3C31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObjects", "BusinessObjects\BusinessObjects.csproj", "{4183631A-FDA6-4097-946E-48FCEA2AE080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObjects", "BusinessObjects\BusinessObjects.csproj", "{4183631A-FDA6-4097-946E-48FCEA2AE080}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{A5EB21F5-0775-4CD9-B492-FE65D0A9F70D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{E6E0A613-AFF4-4172-B15B-FD0DA1DED594}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{E6E0A613-AFF4-4172-B15B-FD0DA1DED594}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogics", "BusinessLogics\BusinessLogics.csproj", "{06A21AC6-1D54-4D29-8422-B3715E12D272}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogics", "BusinessLogics\BusinessLogics.csproj", "{06A21AC6-1D54-4D29-8422-B3715E12D272}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		{4183631A-FDA6-4097-946E-48FCEA2AE080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4183631A-FDA6-4097-946E-48FCEA2AE080}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4183631A-FDA6-4097-946E-48FCEA2AE080}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5EB21F5-0775-4CD9-B492-FE65D0A9F70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5EB21F5-0775-4CD9-B492-FE65D0A9F70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5EB21F5-0775-4CD9-B492-FE65D0A9F70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5EB21F5-0775-4CD9-B492-FE65D0A9F70D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6E0A613-AFF4-4172-B15B-FD0DA1DED594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6E0A613-AFF4-4172-B15B-FD0DA1DED594}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6E0A613-AFF4-4172-B15B-FD0DA1DED594}.Release|Any CPU.ActiveCfg = Release|Any CPU
