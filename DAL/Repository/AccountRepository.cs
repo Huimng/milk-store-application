@@ -10,6 +10,7 @@ namespace DAL.Repository
     public interface IAccountRepository
     {
         public void AddAccount(Account account);
+        public List<Account> GetAccounts();
     }
     public class AccountRepository : IAccountRepository
     {
@@ -42,6 +43,22 @@ namespace DAL.Repository
                     context.Set<Account>().Add(account);
                     context.SaveChanges();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<Account> GetAccounts()
+        {
+            List<Account> accounts = new List<Account>();
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    accounts = context.Set<Account>().Where(x => x.Status == true).ToList();
+                }
+                return accounts;
             }
             catch (Exception ex)
             {

@@ -7,7 +7,7 @@ namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
-    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options){}
+    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
     public BSADBContext() { }
     public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
 
@@ -31,12 +31,13 @@ public partial class BSADBContext : DbContext
 
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
+}
 
 public partial class BSADBContext
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-       
+
         #region Account
 
         // Configure entity mappings and relationships
@@ -273,85 +274,38 @@ public partial class BSADBContext
         });
 
         #endregion
+        #region Product
 
-        #region OrderDetail
-
-        // Configure OrderDetail entity
-        modelBuilder.Entity<OrderDetail>(entity =>
+        // Configure Product entity
+        modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId);
-            entity.Property(e => e.OrderDetailId)
-                .ValueGeneratedOnAdd()
+            entity.HasKey(e => e.ProductId);
+
+            // Column lengths and configurations
+            entity.Property(e => e.ProductName)
+                .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(e => e.OrderId)
+            entity.Property(e => e.ProductCode)
+                .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(e => e.TotalPrice)
+            entity.Property(e => e.Description)
+                .IsRequired();
+
+            entity.Property(e => e.Quantity)
+                .IsRequired();
+
+            entity.Property(e => e.Brand)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.UrlImage)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.Discount)
                 .IsRequired();
 
             entity.Property(e => e.CreatedDate)
-                .IsRequired();
-
-            entity.Property(e => e.UpdatedDate)
-                .IsRequired();
-
-            entity.Property(e => e.ProductId)
-                .IsRequired();
-
-            // Configure relationship with Order
-            entity.HasOne(e => e.Order)
-                .WithMany(o => o.OrderDetails)
-                .HasForeignKey(c => c.OrderId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Configure relationship with Product
-            entity.HasOne(e => e.Product)
-                .WithOne(o => o.OrderDetail)
-                .HasForeignKey<Product>(c => c.ProductId)
-                .IsRequired();
-        });
-
-        #endregion
-
-        #region OrderContact
-
-        modelBuilder.Entity<OrderContact>(entity =>
-        {
-            entity.HasKey(e => e.OrdContacId);
-            entity.Property(e => e.OrdContacId)
-                .ValueGeneratedOnAdd()
-                .IsRequired();
-
-            entity.Property(e => e.CustomerName)
-                .IsRequired();
-
-            entity.Property(e => e.Phone)
-                .IsRequired();
-
-            entity.Property(e => e.Province)
-                .IsRequired();
-
-            entity.Property(e => e.City)
-                .IsRequired();
-
-            entity.Property(e => e.District)
-                .IsRequired();
-
-            entity.Property(e => e.HouseNumber)
-                .IsRequired();
-
-            entity.Property(e => e.CreatedDate)
-                .IsRequired();
-
-            entity.Property(e => e.UpdatedDate)
-                .IsRequired();
-
-            // Define relationship with Order
-            entity.HasOne(oc => oc.Order)
-                .WithOne(o => o.OrderContact)
-                .HasForeignKey<OrderContact>(oc => oc.OrderId)
                 .IsRequired();
         });
 
@@ -405,41 +359,91 @@ public partial class BSADBContext
 
         #endregion
 
-        #region Product
+        #region OrderDetail
 
-        // Configure Product entity
-        modelBuilder.Entity<Product>(entity =>
+        // Configure OrderDetail entity
+        modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => e.ProductId);
-
-            // Column lengths and configurations
-            entity.Property(e => e.ProductName)
-                .HasMaxLength(255)
+            entity.HasKey(e => e.OrderDetailId);
+            entity.Property(e => e.OrderDetailId)
+                .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            entity.Property(e => e.ProductCode)
-                .HasMaxLength(255)
+            entity.Property(e => e.OrderId)
                 .IsRequired();
 
-            entity.Property(e => e.Description)
-                .IsRequired();
-
-            entity.Property(e => e.Quantity)
-                .IsRequired();
-
-            entity.Property(e => e.Brand)
-                .HasMaxLength(255);
-
-            entity.Property(e => e.UrlImage)
-                .HasMaxLength(255);
-
-            entity.Property(e => e.Discount)
+            entity.Property(e => e.TotalPrice)
                 .IsRequired();
 
             entity.Property(e => e.CreatedDate)
                 .IsRequired();
+
+            entity.Property(e => e.UpdatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.ProductId)
+                .IsRequired();
+
+            // Configure relationship with Order
+            entity.HasOne(e => e.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(c => c.OrderId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure relationship with Product
+            entity.HasOne(e => e.Product)
+                .WithMany(o => o.OrderDetail)
+                .HasForeignKey(c => c.ProductId)
+                .IsRequired();
         });
 
         #endregion
+
+        #region OrderContact
+
+        modelBuilder.Entity<OrderContact>(entity =>
+        {
+            entity.HasKey(e => e.OrdContacId);
+            entity.Property(e => e.OrdContacId)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            entity.Property(e => e.CustomerName)
+                .IsRequired();
+
+            entity.Property(e => e.Phone)
+                .IsRequired();
+
+            entity.Property(e => e.Province)
+                .IsRequired();
+
+            entity.Property(e => e.City)
+                .IsRequired();
+
+            entity.Property(e => e.District)
+                .IsRequired();
+
+            entity.Property(e => e.HouseNumber)
+                .IsRequired();
+
+            entity.Property(e => e.CreatedDate)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedDate)
+                .IsRequired();
+
+            // Define relationship with Order
+            entity.HasOne(oc => oc.Order)
+                .WithOne(o => o.OrderContact)
+                .HasForeignKey<OrderContact>(oc => oc.OrderId)
+                .IsRequired();
+        });
+
+        #endregion
+
+        
+
+        
     }
 }
