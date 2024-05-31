@@ -251,7 +251,53 @@ namespace DAL.Migrations
 
                     b.ToTable("OrderContacts");
                 });
+            modelBuilder.Entity("BusinessObjects.Product", b =>
+            {
+                b.Property<int>("ProductId")
+                    .HasColumnType("integer");
 
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductId"));
+
+                b.Property<string>("Brand")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.Property<DateTime>("CreatedDate")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                b.Property<double>("Discount")
+                    .HasColumnType("double precision");
+
+                b.Property<string>("ProductCode")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.Property<string>("ProductName")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.Property<int>("Quantity")
+                    .HasColumnType("integer");
+
+                b.Property<int>("Status")
+                    .HasColumnType("integer");
+
+                b.Property<string>("UrlImage")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.HasKey("ProductId");
+
+                b.ToTable("Products");
+            });
             modelBuilder.Entity("BusinessObjects.OrderDetail", b =>
                 {
                     b.Property<int>("OrderDetailId")
@@ -279,7 +325,7 @@ namespace DAL.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("OrderDetailId");
-
+                    b.HasIndex("ProductId");
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");

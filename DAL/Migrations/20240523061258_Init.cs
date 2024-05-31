@@ -148,6 +148,26 @@ namespace DAL.Migrations
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                 name: "Products",
+                 columns: table => new
+    {
+        ProductId = table.Column<int>(type: "integer", nullable: false),
+        ProductName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+        ProductCode = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+        Description = table.Column<string>(type: "text", nullable: false),
+        Quantity = table.Column<int>(type: "integer", nullable: false),
+        Brand = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+        UrlImage = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+        Status = table.Column<int>(type: "integer", nullable: false),
+        Discount = table.Column<double>(type: "double precision", nullable: false),
+        CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+    },
+                 constraints: table =>
+                 {
+                     table.PrimaryKey("PK_Products", x => x.ProductId);
+                 }
+                 );
 
             migrationBuilder.CreateTable(
                 name: "OrderDetails",
@@ -171,33 +191,17 @@ namespace DAL.Migrations
                         principalTable: "Orders",
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    ProductName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    ProductCode = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    Brand = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    UrlImage = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Discount = table.Column<double>(type: "double precision", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Products_OrderDetails_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "OrderDetails",
-                        principalColumn: "OrderDetailId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                      name: "FK_OrderDetails_Products_ProductId",
+                      column: x => x.ProductId,
+                      principalTable: "Products",
+                      principalColumn: "ProductId",
+                      onDelete: ReferentialAction.Restrict);
+                }
+
+                );
+
+
 
             migrationBuilder.CreateTable(
                 name: "Posts",

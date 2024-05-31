@@ -35,7 +35,7 @@ namespace MilkStore.Pages.User
             Account.Role = AccountRoles.Member; // Default role
             var account = Account;
             _accountService.AddAccount(account);
-            return RedirectToPage(""); ;
+            return RedirectToPage("/User/Login"); ;
         }
     }
 }

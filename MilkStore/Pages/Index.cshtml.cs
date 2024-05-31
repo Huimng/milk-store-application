@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MilkStore.Pages
 {
+    [Authorize(Roles = "Member")]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -11,7 +13,7 @@ namespace MilkStore.Pages
         {
             _logger = logger;
         }
-
+        
         public void OnGet()
         {
 

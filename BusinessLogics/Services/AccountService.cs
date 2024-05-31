@@ -12,6 +12,7 @@ namespace BusinessLogics.Services
     public interface IAccountService
     {
         public void AddAccount(Account account);
+        public List<Account> GetAccounts();
     }
     public class AccountService : IAccountService
     {
@@ -22,6 +23,8 @@ namespace BusinessLogics.Services
         }
 
         public void AddAccount(Account account) => _accountRepository.AddAccount(account);
+
+        public List<Account> GetAccounts() => _accountRepository.GetAccounts();
 
     }
 }
