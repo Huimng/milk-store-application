@@ -15,13 +15,13 @@ var connectionstring = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<BSADBContext>(option =>
 {
     option.UseNpgsql(connectionstring);
-});
+});//////////////////////////////////
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/User/Login";
-        options.AccessDeniedPath = "/User/AccessDenied";
+        options.AccessDeniedPath = "/User/Login";
     }
     );
 
