@@ -11,11 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
-var connectionstring = builder.Configuration.GetConnectionString("DefaultConnectStrings");
-builder.Services.AddDbContext<BSADBContext>(option =>
-{
-    option.UseNpgsql(connectionstring);
-});//////////////////////////////////
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -46,4 +41,4 @@ app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
 
-app.Run();
+await app.RunAsync();

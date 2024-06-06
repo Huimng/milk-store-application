@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  postgresql-babystore:
+    container_name: postgresql-babystore-database
+    image: postgres:13.14-bullseye
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - babystore-networks
+    volumes:
+      - postgres-data-babystore:/var/lib/postgresql/data
+
+  pg-admin-babystore:
+    container_name: postgres-admin-local-babystore
+    image: elestio/pgadmin:REL-8_6
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGA_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGA_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGA_PORT}
+    networks:
+      - babystore-networks
+      - ng-prox-manager
+    volumes:
+      - pgadmin-data-babystore:/var/lib/pgadmin4
+
+  babystore-webapplication:
+    container_name: babystore-webapplication
+    image: ${DOCKER_USERNAME}/milk-store-application:latest
+    restart: always
+    environment:
+      DB_URL: postgresql-babystore
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - babystore-networks
+      - ng-prox-manager
+
+networks:
+  babystore-networks:
+    name: babystore-networks
+  ng-prox-manager:
+    name: ng-prox-manager
+    external: true
+
+volumes:
+  postgres-data-babystore:
+  pgadmin-data-babystore:
