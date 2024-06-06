@@ -4,9 +4,11 @@ using BusinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BusinessLogics.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MilkStore.Pages.Home
 {
+    [Authorize(Roles = "Member")]
     public class CartModel : PageModel
     {
         private readonly IProductService _productService;
