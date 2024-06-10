@@ -52,4 +52,4 @@ jobs:
       run: docker rmi ${{secrets.DOCKER_USERNAME}}/milk-store-application:latest 
       continue-on-error: true
     - name: Deploy API
-      run: docker compose -f docker-compose.test.yaml -p milk-store-application-test up -d babystore-webapplication
+      run: docker compose -f docker-compose.test.yaml -p milk-store-application-test up -d
