@@ -13,8 +13,9 @@ public class Product
     public double Discount { get; set; }
     public DateTime CreatedDate { get; set; }
     public virtual ICollection<OrderDetail>? OrderDetail { get; set; }
-    public virtual ICollection<Post> Posts { get; set; }
+    public virtual ICollection<Post>? Posts { get; set; }
     public virtual ICollection<ProductFeedback>? ProductFeedbacks { get; set; }
+    public virtual ICollection<ProductLine>? ProductLines { get; set; }
 }
 public enum ProductStatus
 {
