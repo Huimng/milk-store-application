@@ -1,0 +1,55 @@
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  milk-store-application-build:
+    name: Build source code to Docker image
+    runs-on: ubuntu-22.04 
+    steps:
+      - name: Checkout Develop
+        uses: actions/checkout@v3
+
+      - name: DockerHub Login
+        uses: docker/login-action@v3.1.0
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Build Image And Push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/milk-store-application:latest
+  
+  staging-webapp-deploy:
+    name: Deploy Web Application To Server For Testing
+    runs-on: arisa-server-deploy
+    needs: milk-store-application-build
+    env:
+      PGA_EMAIL: ${{secrets.PGA_EMAIL}}
+      PGA_PASSWORD: ${{secrets.PGA_PASSWORD}}
+      PGA_PORT: ${{secrets.PGA_PORT}}
+
+      DB_PORT: ${{secrets.DB_PORT}}
+      DB_USERNAME: ${{secrets.DB_USERNAME}}
+      DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+      DB_NAME: ${{secrets.DB_NAME}}
+
+      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+    steps:
+    - name: Checkout Develop
+      uses: actions/checkout@v3
+    - name: DockerHub Login
+      uses: docker/login-action@v3.1.0
+      with:
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_PASSWORD}}
+    - name: Stop BachHoaSi API
+      run: docker compose -f docker-compose.test.yaml -p milk-store-application-test down babystore-webapplication
+    - name: Clean Old BachHoaSi Image
+      run: docker rmi ${{secrets.DOCKER_USERNAME}}/milk-store-application:latest 
+      continue-on-error: true
+    - name: Deploy API
+      run: docker compose -f docker-compose.test.yaml -p milk-store-application-test up -d

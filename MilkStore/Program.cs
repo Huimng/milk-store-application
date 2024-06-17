@@ -11,11 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
-var connectionstring = builder.Configuration.GetConnectionString("DefaultConnectStrings");
-builder.Services.AddDbContext<BSADBContext>(option =>
-{
-    option.UseNpgsql(connectionstring);
-});//////////////////////////////////
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -24,7 +19,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/User/Login";
     }
     );
-
+// builder.Services.AddDbContext<BSADBContext>(options =>
+//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -46,4 +42,4 @@ app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
 
-app.Run();
+await app.RunAsync();

@@ -7,9 +7,10 @@ namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
-    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
-    public BSADBContext() { }
-    public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
+    // public BSADBContext() { }
+    // public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
+    //
+    // public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -21,23 +22,16 @@ public partial class BSADBContext : DbContext
     public DbSet<Post> Posts { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductFeedback> ProductFeedbacks { get; set; }
+    public DbSet<ProductLine> ProductLines { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            // Build the configuration
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+        var connectstring = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
 
-            // Retrieve the connection string
-            var connectionString = configuration.GetConnectionString("DefaultConnectStrings");
-
-            // Configure the DbContext to use Npgsql with the connection string
-            optionsBuilder.UseNpgsql(connectionString);
-        }
+        optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
 
 }
@@ -283,6 +277,7 @@ public partial class BSADBContext
         });
 
         #endregion
+        
         #region Product
 
         // Configure Product entity
@@ -451,8 +446,28 @@ public partial class BSADBContext
 
         #endregion
 
-        
+        #region ProductLine
 
-        
+        // Configure ProductLine entity
+        modelBuilder.Entity<ProductLine>(entity =>
+        {
+            entity.HasKey(e => e.ProductLineId);
+
+            // Column lengths and configurations
+            entity.Property(e => e.ExpireDate)
+                .IsRequired();
+            entity.Property(e => e.AgeGroup)
+                .IsRequired()
+                .HasMaxLength(125);
+
+            // Define relationship
+            entity.HasOne(e => e.Product)
+                .WithMany(o => o.ProductLines)
+                .HasForeignKey(c => c.ProductId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        #endregion
     }
 }
