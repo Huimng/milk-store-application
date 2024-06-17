@@ -24,13 +24,22 @@ public partial class BSADBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectstring = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
+        if (!optionsBuilder.IsConfigured)
+        {
+            // Build the configuration
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-        optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
+            // Retrieve the connection string
+            var connectionString = configuration.GetConnectionString("DefaultConnectStrings");
+
+            // Configure the DbContext to use Npgsql with the connection string
+            optionsBuilder.UseNpgsql(connectionString);
+        }
     }
+
 }
 
 public partial class BSADBContext
