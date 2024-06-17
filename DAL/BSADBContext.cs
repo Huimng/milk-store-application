@@ -34,6 +34,7 @@ public partial class BSADBContext : DbContext
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
 
+
 }
 
 public partial class BSADBContext
