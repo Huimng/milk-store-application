@@ -7,10 +7,10 @@ namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
-    // public BSADBContext() { }
-    // public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
-    //
-    // public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
+    public BSADBContext() { }
+    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
+
+    public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Comment> Comments { get; set; }

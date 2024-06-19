@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MilkStore.Pages.Home
 {
-    [Authorize(Roles = "Member")]
+    //[Authorize(Roles = "Member")]
     public class CartModel : PageModel
     {
         private readonly IProductService _productService;

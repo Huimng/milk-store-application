@@ -9,23 +9,26 @@ namespace DAL.Repository
 {
     public interface IProductRepository
     {
-        public IQueryable<Product> GetAllProduct();
+        public List<Product> GetAllProduct();
         public Product GetProduct(int id);
     }
     public class ProductRepository : IProductRepository
     {
-        private readonly BSADBContext _context;
+        //private readonly BSADBContext _context;
 
-        public ProductRepository(BSADBContext context)
-        {
-            _context = context;
-        }
+        //public ProductRepository(BSADBContext context)
+        //{
+        //    _context = context;
+        //}
 
-        public IQueryable<Product> GetAllProduct()
+        public List<Product> GetAllProduct()
         {
             try
             {
-                return _context.Set<Product>().AsQueryable();
+                using (var context = new BSADBContext())
+                {
+                    return context.Set<Product>().ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -37,8 +40,12 @@ namespace DAL.Repository
         {
             try
             {
-               var _product = _context.Set<Product>().FirstOrDefault(x => x.ProductId == id);
-                return _product;
+                using (var context = new BSADBContext())
+                {
+                    var _product = context.Set<Product>().FirstOrDefault(x => x.ProductId == id);
+
+                    return _product;
+                }
             }
             catch (Exception ex)
             {
