@@ -27,9 +27,6 @@ namespace MilkStore.Pages.Orders
             return Page();
         }
 
-        public IActionResult OnPost()
-        {
 
-        }
     }
 }
