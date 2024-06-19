@@ -26,7 +26,12 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
-
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderContactRepository, OrderContactRepository>();
+builder.Services.AddScoped<IOrderContactService, OrderContactService>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,5 +46,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
-
+app.MapGet("/", () => Results.Redirect("/Home/Product"));
 await app.RunAsync();

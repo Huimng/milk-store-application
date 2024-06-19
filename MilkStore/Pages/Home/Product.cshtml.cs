@@ -17,24 +17,23 @@ namespace MilkStore.Pages.Home
         }
 
         public IList<Product> Products { get; set; }
-        public int PageIndex { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; } = 3; // Number of articles per page
         public int TotalPages { get; set; }
 
 
-        public async Task OnGetAsync(int pageIndex = 1)
+        public async Task OnGetAsync(int currentPage = 1)
         {
-            int pageSize = 5;
+            CurrentPage = currentPage;
             var productsQuery = _productService.GetAllProduct();
 
-            // Get total count of products
-            var count = await productsQuery.CountAsync();
+            TotalPages = (int)Math.Ceiling(productsQuery.Count / (double)PageSize);
 
-            // Calculate total pages
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            // Get products for the current page
-            Products = await productsQuery.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            PageIndex = pageIndex;
+            Products = productsQuery
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+            
         }
     }
 }

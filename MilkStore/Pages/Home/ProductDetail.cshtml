@@ -17,7 +17,7 @@
         <p>Quantity: @Product.Quantity</p>
         <p>Status: <span class="status @(Product.Status == ProductStatus.Available ? "available" : "out-of-stock")">@Product.Status</span></p>
         <p>Price: <span class="discount">@Product.Discount.ToString("C")</span></p>
-        <form method="post">
+        <form method="post" >
             <input type="hidden" name="productId" value="@Product.ProductId" />
             <label for="quantity">Quantity:</label>
         <div class="quantity-selector">
@@ -26,12 +26,14 @@
             <button type="button" onclick="changeQuantity(1)">+</button>
         </div>
         <div class="product-order">
-                <button type="submit" formaction="/Home/Cart?handler=AddToCart">Add to Cart</button>
+                <button type="submit" formaction="/Home/Cart?handler=AddToCart" onclick="showAddToCartMessage()">Add to Cart</button>
                 <button type="submit" formaction="/Home/ProductDetail?handler=BuyNow">Buy Now</button>
         </div>
         </form>
     </div>
 </div>
+
+
 
 <style>
     body {
@@ -149,6 +151,21 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+    .alert {
+        display: none;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+    }
+
+        .alert.show {
+            display: block;
+        }
 </style>
 
 <script>
@@ -163,4 +180,15 @@
             }
         }
     }
+
+
+    function showAddToCartMessage() {
+        var alertMessage = document.getElementById('addToCartAlert');
+        alertMessage.classList.add('show');
+        setTimeout(function () {
+            alertMessage.classList.remove('show');
+        }, 10000); // Hide after 2 seconds
+    }
 </script>
+<div id="addToCartAlert" class="alert">Product added to cart!</div>
+

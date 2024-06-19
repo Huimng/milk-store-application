@@ -22,6 +22,6 @@ namespace MilkStore.Pages.Home
             ViewData["product"] = product;
         }
 
-       
+
     }
 }

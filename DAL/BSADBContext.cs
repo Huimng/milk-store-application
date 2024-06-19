@@ -7,10 +7,10 @@ namespace DAL;
 
 public partial class BSADBContext : DbContext
 {
-    // public BSADBContext() { }
-    // public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
-    //
-    // public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
+    public BSADBContext() { }
+    public BSADBContext(DbContextOptions<BSADBContext> options) : base(options) { }
+
+    public DatabaseFacade DatabaseFacade => throw new NotImplementedException();
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -30,10 +30,11 @@ public partial class BSADBContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
-        
+
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
-        //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=17011206;");
     }
+
+
 }
 
 public partial class BSADBContext

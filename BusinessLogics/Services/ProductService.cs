@@ -11,7 +11,7 @@ namespace BusinessLogics.Services
 {
     public interface IProductService
     {
-        public IQueryable<Product> GetAllProduct();
+        public List<Product> GetAllProduct();
         public Product GetProduct(int id);
     }
     public class ProductService: IProductService
@@ -23,7 +23,7 @@ namespace BusinessLogics.Services
             _productRepository = serviceProvider.GetRequiredService<IProductRepository>();
         }
 
-        public IQueryable<Product> GetAllProduct() => _productRepository.GetAllProduct();
+        public List<Product> GetAllProduct() => _productRepository.GetAllProduct();
         public Product GetProduct(int id) => _productRepository.GetProduct(id);
 
     }
