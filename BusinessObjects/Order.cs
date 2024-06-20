@@ -13,6 +13,7 @@ public class Order
     public DateTime UpdatedDate { get; set; }
     public int AccountId { get; set; }
     public DeliveryTypes Type { get; set; }
+    public PaymentType PaymentMethod { get; set; }
     public virtual ICollection<ProductFeedback>? ProductFeedbacks { get; set; }
     public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     public virtual Account? Account { get; set; }

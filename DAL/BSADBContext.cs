@@ -30,7 +30,7 @@ public partial class BSADBContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
-
+        
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
 
@@ -352,6 +352,8 @@ public partial class BSADBContext
                 .IsRequired();
 
             entity.Property(e => e.Type)
+                .IsRequired();
+            entity.Property(e => e.PaymentMethod)
                 .IsRequired();
 
             //Define relationship
