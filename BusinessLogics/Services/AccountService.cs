@@ -13,6 +13,7 @@ namespace BusinessLogics.Services
     {
         public void AddAccount(Account account);
         public List<Account> GetAccounts();
+        public Account GetAccount(int id);
     }
     public class AccountService : IAccountService
     {
@@ -26,5 +27,13 @@ namespace BusinessLogics.Services
 
         public List<Account> GetAccounts() => _accountRepository.GetAccounts();
 
+        void IAccountService.AddAccount(Account account)
+        {
+            throw new NotImplementedException();
+        }
+
+        Account IAccountService.GetAccount(int id) => _accountRepository.GetAccount(id);
+
+        List<Account> IAccountService.GetAccounts() => _accountRepository.GetAccounts();
     }
 }

@@ -1,0 +1,61 @@
+﻿@page
+@model MilkStore.Pages.PostManager.IndexModel
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].Contents)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].Account)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListPost[0].Product)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListPost)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contents)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Account.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Brand)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.PostId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.PostId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.PostId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

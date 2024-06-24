@@ -11,6 +11,7 @@ namespace DAL.Repository
     {
         public void AddAccount(Account account);
         public List<Account> GetAccounts();
+        public Account GetAccount(int id);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -49,6 +50,23 @@ namespace DAL.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public Account GetAccount(int id)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    var account = context.Set<Account>().FirstOrDefault(x => x.AccountId == id);
+                    return account;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<Account> GetAccounts()
         {
             List<Account> accounts = new List<Account>();
