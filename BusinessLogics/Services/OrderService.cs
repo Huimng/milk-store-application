@@ -11,7 +11,9 @@ namespace BusinessLogics.Services
 {
     public interface IOrderService
     {
-        public void CreateOrder(Order order);
+        public Order CreateOrder(Order order);
+        public List<Order> GetAllOrder();
+        public List<Order> GetAllOrderByAccount(int idAccount);
     }
     public class OrderService : IOrderService
     {
@@ -21,6 +23,8 @@ namespace BusinessLogics.Services
             _orderRepository= serviceProvider.GetRequiredService<IOrderRepository>();
         }
 
-        public void CreateOrder(Order order) => _orderRepository.CreateOrder(order);
+        public Order CreateOrder(Order order) => _orderRepository.CreateOrder(order);
+        public List<Order> GetAllOrder() => _orderRepository.GetAllOrder();
+        public List<Order> GetAllOrderByAccount(int idAccount) => _orderRepository.GetAllOrderByAccount(idAccount);
     }
 }

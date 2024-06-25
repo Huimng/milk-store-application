@@ -12,6 +12,9 @@ namespace BusinessLogics.Services
     public interface IOrderDetailService
     {
         public void CreateOrderDetail(OrderDetail orderDetail);
+        public List<OrderDetail> GetAllOrderDetail();
+        public List<OrderDetail> GetAllOrderDetailByOrder(int idOrder);
+
     }
     public class OrderDetailService : IOrderDetailService
     {
@@ -23,6 +26,9 @@ namespace BusinessLogics.Services
         }
 
         public void CreateOrderDetail(OrderDetail orderDetail) => _orderDetailRepository.CreateOrderDetail(orderDetail);
+        public List<OrderDetail> GetAllOrderDetail() => _orderDetailRepository.GetAllOrderDetail();
+
+        public List<OrderDetail> GetAllOrderDetailByOrder(int idOrder) => _orderDetailRepository.GetAllOrderDetailByOrder(idOrder);
 
     }
 }

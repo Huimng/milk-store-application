@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,14 @@ namespace DAL.Repository
 {
     public interface IOrderRepository
     {
-        public void CreateOrder(Order order);
+        public Order CreateOrder(Order order);
+        public List<Order> GetAllOrder();
+        public List<Order> GetAllOrderByAccount(int idAccount);
+
     }
     public class OrderRepository : IOrderRepository
     {
-        public void CreateOrder(Order order)
+        public Order CreateOrder(Order order)
         {
             try
             {
@@ -22,8 +26,38 @@ namespace DAL.Repository
                 {
                     context.Set<Order>().Add(order);
                     context.SaveChanges();
+                    
                 }
+                return order;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
+        public List<Order> GetAllOrder()
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    return context.Set<Order>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<Order> GetAllOrderByAccount(int idAccount)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    return context.Set<Order>().Where(x=>x.AccountId == idAccount).Include(na=>na.OrderDetails).Include(x=>x.OrderContact).ToList();
+                }
             }
             catch (Exception ex)
             {

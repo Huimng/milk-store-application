@@ -30,9 +30,10 @@ public partial class BSADBContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
-        
+
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
+
 
 
 }
