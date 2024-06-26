@@ -37,6 +37,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Home/Cart">Cart</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Orders/GetOrders">Order</a>
+                        </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -62,11 +65,18 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    @if (ViewData["NoContainer"] == null)
+    {
+        <div class="container">
+            <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Milk Store - <a asp-area="" asp-page="/Privacy">Privacy</a>

@@ -27,7 +27,8 @@ namespace MilkStore.Pages.Orders
 
         private readonly IOrderDetailService _orderDetailService;
 
-        public IndexModel(IServiceProvider serviceProvider)
+
+        public IndexModel(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _orderContactService = serviceProvider.GetRequiredService<IOrderContactService>();
             _orderService = serviceProvider.GetRequiredService<IOrderService>();
@@ -45,16 +46,28 @@ namespace MilkStore.Pages.Orders
             
         }
 
-        public IActionResult OnPost()
+        public void OnPost()
         {
             //if (ModelState.IsValid)
             //{
+
             TotalPrice = 0;
             Cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             foreach (var item in Cart)
             {
                 TotalPrice += (item.Price * item.Quantity);
             }
+
+
+            if (Order.PaymentMethod == PaymentType.PayPal)
+            {
+                HttpContext.Session.SetObjectAsJson("Order", Order);
+                HttpContext.Session.SetObjectAsJson("OrderContact", OrderContact);
+                Response.Redirect("/PaymentOrder");
+                return;
+            }  
+
+
             Order.Status = OrderStatus.Pending;
                 Order.TotalDiscount = 0;
                 Order.SubTotal = 0;
@@ -87,9 +100,12 @@ namespace MilkStore.Pages.Orders
                     orderDetail.ProductId = item.ProductId;
                     _orderDetailService.CreateOrderDetail(orderDetail);
                 }
+
+
                 HttpContext.Session.Remove("Cart");
 
-                return RedirectToPage("/Home/Product");
+
+             RedirectToPage("/Home/Product");
             //}
             //else
             //{

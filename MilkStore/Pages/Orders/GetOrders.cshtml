@@ -17,6 +17,13 @@
         <div class="col-md-6">
             <h2 class="product-header">Thông tin người nhận</h2>
                 <div class="mb-3">
+                    <p class="form-label">Ngày tạo: @order.CreatedDate</p>
+                </div>
+                <div class="mb-3">
+                    <p class="form-label">Trạng thái đơn hàng: @order.Status
+                    </p>
+                </div>
+                <div class="mb-3">
                     <p class="form-label">Họ và tên: @order.OrderContact.CustomerName </p>
                 </div>
                 <!-- Các trường thông tin khác -->
@@ -25,9 +32,6 @@
                 </div>
                 <div class="mb-3">
                     <p class="form-label">Địa chỉ:  @order.Address</p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">Ngày tạo: @order.CreatedDate</p>
                 </div>
                 <div class="mb-3">
                     <p class="form-label">Phương thức vận chuyển: @order.Type </p>
@@ -75,7 +79,14 @@
 
         
     </div>
+        <br/>
+        <br/>
+        <hr width="100%" size="7px" align="center" color="red" />
+        <br/>
+        <br/>
     }
+
+
 </div>
 
 

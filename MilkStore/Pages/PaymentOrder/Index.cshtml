@@ -1,0 +1,87 @@
+﻿@page
+@model MilkStore.Pages.PaymentOrder.IndexModel
+@{
+    ViewData["NoContainer"] = true;
+}
+<script src="https://www.paypal.com/sdk/js?client-id=@(Model.PaypalClientId)&currency=USD"></script>
+<div class="p-5" style="background-color: #08618d">
+    <div class="mx-auto p-3 bg-light rounded border" style="width: 420px;">
+        <h2 class="text-center mb-5">Complete your order</h2>
+        <div class="row mb-3">
+            <div class="col-5">Name</div>
+            <div class="col-7">@Model.OrderContact.CustomerName</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Total Amount</div>
+            <div class="col-7">@Model.Order.GrandTotal</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Phone</div>
+            <div class="col-7">@Model.OrderContact.Phone</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Address</div>
+            <div class="col-7">@Model.Order.Address</div>
+        </div>
+        <br />
+        <div id="notification-container" class="text-start mt-3"></div>
+        <div id="paypal-button-container" class="text-start mt-3"></div>
+    </div>
+</div>
+
+
+<script>
+    let paypal_buttons = paypal.Buttons({
+        createOrder() {
+            return fetch("/PaymentOrder?handler=CreateOrder", {
+                method: "POST"
+            }
+            ).then((response) => response.json())
+                .then((order) => order.id)
+
+        },
+        onApprove(data) {
+            paypal_buttons.close();
+            // Capture the funds from the transaction.
+            return fetch("/PaymentOrder?handler=CompleteOrder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    orderID: data.orderID
+                })
+            }).then((response) => response.json())
+                .then((details) => {
+                    if (details == "success") {
+                        document.getElementById("notification-container").innerHTML =
+                            '<div class="alert alert-success" role="alert">The order is created successfully!</div>';
+                    } else {
+                        document.getElementById("notification-container").innerHTML =
+                            '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
+                    }
+                });
+        },
+        onCancel(data) {
+            document.getElementById("notification-container").innerHTML =
+                '<div class="alert alert-danger" role="alert">Order Cancel!</div>';
+
+            return fetch("/PaymentOrder?handler=CancelOrder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    orderID: data.orderID
+                })
+            });
+
+
+        },
+        onError(err) {
+            document.getElementById("notification-container").innerHTML =
+                '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
+        }
+    });
+    paypal_buttons.render('#paypal-button-container');
+</script>

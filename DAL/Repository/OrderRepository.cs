@@ -42,7 +42,7 @@ namespace DAL.Repository
             {
                 using (var context = new BSADBContext())
                 {
-                    return context.Set<Order>().ToList();
+                    return context.Set<Order>().OrderByDescending(n => n.CreatedDate).ToList();
                 }
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace DAL.Repository
             {
                 using (var context = new BSADBContext())
                 {
-                    return context.Set<Order>().Where(x=>x.AccountId == idAccount).Include(na=>na.OrderDetails).Include(x=>x.OrderContact).ToList();
+                    return context.Set<Order>().Where(x=>x.AccountId == idAccount).Include(na=>na.OrderDetails).Include(x=>x.OrderContact).OrderByDescending(n => n.CreatedDate).ToList();
                 }
             }
             catch (Exception ex)
