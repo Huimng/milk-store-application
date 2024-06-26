@@ -1,0 +1,132 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #fdfdfd;
+    color: #333;
+}
+
+.header {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.header h1 {
+    color: #ffffff;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.products {
+    padding: 60px 20px;
+}
+
+.products h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.product-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    width: calc(33% - 40px);
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-item h3 {
+    margin-top: 15px;
+    color: #4D4D4D;
+}
+
+.product-item p {
+    color: #666;
+    margin: 10px 0;
+}
+
+.product-item .price {
+    color: #6CA6CD;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #6CA6CD;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #5c92b1;
+}
+
+.footer {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer p {
+    color: #ffffff;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a,
+.pagination span {
+    margin: 0 5px;
+    text-decoration: none;
+}
+
+.pagination a {
+    color: blue;
+}
+
+.pagination span {
+    font-weight: bold;
+}
