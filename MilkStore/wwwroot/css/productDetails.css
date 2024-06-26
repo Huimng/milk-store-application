@@ -1,0 +1,170 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #fdfdfd;
+    color: #333;
+}
+
+.header {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+    .header h1 {
+        color: #ffffff;
+    }
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+    .nav-links li {
+        margin: 0 15px;
+    }
+
+    .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+.product-detail {
+    padding: 60px 20px;
+}
+
+    .product-detail .price {
+        color: #6CA6CD;
+        font-size: 24px;
+        margin: 20px 0;
+    }
+
+    .product-detail img {
+        border-radius: 10px;
+    }
+
+.footer {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+    .footer p {
+        color: #ffffff;
+    }
+
+.product-image {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.product-info {
+    flex: 2;
+    padding: 20px;
+}
+
+    .product-info h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .product-info p {
+        font-size: 1em;
+        margin: 10px 0;
+    }
+
+    .product-info .status {
+        font-weight: bold;
+    }
+
+    .product-info .available {
+        color: green;
+    }
+
+    .product-info .out-of-stock {
+        color: red;
+    }
+
+    .product-info .discount {
+        color: #d9534f;
+        font-weight: bold;
+    }
+
+.product-order {
+    margin-top: 20px;
+}
+
+    .product-order button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+        .product-order button:hover {
+            background-color: #0056b3;
+        }
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+    .quantity-selector button {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        margin: 0 5px;
+    }
+
+        .quantity-selector button:hover {
+            background-color: #0056b3;
+        }
+
+    .quantity-selector input {
+        width: 60px;
+        text-align: center;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+.alert {
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+    .alert.show {
+        display: block;
+    }
