@@ -1,0 +1,114 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdecec !important; /* Pastel pink background color */
+}
+
+.login-container {
+    display: flex;
+    width: 100%; /* Adjust as needed */
+    max-width: 1200px; /* Adjust as needed */
+    height: 80%; /* Adjust as needed */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f8e8e8 0%, #f4c1c1 100%);
+}
+
+.login-image {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .login-image img {
+        width: 110%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.login-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+    .login-box h2 {
+        color: #6CA6CD; /* Pastel blue color */
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 500;
+    }
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #4D4D4D;
+        font-weight: 500;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+        .input-group input:focus {
+            border-color: #6CA6CD; /* Pastel blue color */
+            box-shadow: 0 0 5px rgba(108, 166, 205, 0.3);
+        }
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #6CA6CD; /* Pastel blue color */
+    border: none;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+}
+
+    .login-button:hover {
+        background-color: #5c92b1; /* Slightly darker blue */
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.register-container p {
+    margin-top: 10px;
+    color: #4D4D4D;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}

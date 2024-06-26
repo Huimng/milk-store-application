@@ -2,24 +2,48 @@
 @model MilkStore.Pages.User.LoginModel
 @{
     ViewData["Title"] = "Login";
+    Layout = null;
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Input.Username"></label>
-        <input asp-for="Input.Username" class="form-control" />
-        <span asp-validation-for="Input.Username" class="text-danger"></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/userLogin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-image">
+            <img src="/uploads/login.jpg" alt="Cute Baby">
+        </div>
+        <div class="login-box">
+            <h2 class="text-center">Baby Store</h2>
+            <form method="post" class="w-100">
+                <div class="input-group">
+                    <label asp-for="Input.Username"></label>
+                    <input asp-for="Input.Username" class="form-control" />
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" type="password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="login-button btn btn-primary">Login</button>
+                <div class="register-container text-center mt-3">
+                    <p>Don't have an account yet? <a href="/User/Register" class="register-link">Create one now</a></p>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Input.Password"></label>
-        <input asp-for="Input.Password" type="password" class="form-control" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>
+
+

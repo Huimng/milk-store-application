@@ -1,38 +1,58 @@
 ﻿@page
 @model MilkStore.Pages.User.RegisterModel
 @{
-  
+    ViewData["Title"] = "Register";
+    Layout = null;
 }
 @using BusinessObjects;
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/userLogin.css"> 
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2 class="text-center">Welcome to Baby Store</h2>
+            <form method="post">
+                <div class="input-group">
+                    <label asp-for="Account.Name">Username</label>
+                    <input asp-for="Account.Name" class="form-control" required />
+                    <span asp-validation-for="Account.Name" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <label asp-for="Account.Email">Email</label>
+                    <input asp-for="Account.Email" class="form-control" required />
+                    <span asp-validation-for="Account.Email" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <label asp-for="Account.Username">Username</label>
+                    <input asp-for="Account.Username" class="form-control" required />
+                    <span asp-validation-for="Account.Username" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <label asp-for="Account.Password">Password</label>
+                    <input asp-for="Account.Password" type="password" class="form-control" required />
+                    <span asp-validation-for="Account.Password" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+                </div>
+                <button type="submit" class="login-button">Register</button>
+                <div class="register-container text-center mt-3">
+                    <p>Already have an account? <a href="/User/Login" class="register-link">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<h1>Register</h1>
-
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Account.Name"></label>
-        <input asp-for="Account.Name" class="form-control" />
-        <span asp-validation-for="Account.Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Account.Email"></label>
-        <input asp-for="Account.Email" class="form-control" />
-        <span asp-validation-for="Account.Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Account.Username"></label>
-        <input asp-for="Account.Username" class="form-control" />
-        <span asp-validation-for="Account.Username" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Account.Password"></label>
-        <input asp-for="Account.Password" type="password" class="form-control" />
-        <span asp-validation-for="Account.Password" class="text-danger"></span>
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Register</button>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>
