@@ -12,6 +12,8 @@ namespace BusinessLogics.Services
     public interface IOrderContactService
     {
         public void CreateOrderContact(OrderContact orderContact);
+        public List<OrderContact> GetAllOrderContact();
+        public OrderContact GetOrderContact(int id);
     }
     public class OrderContactService : IOrderContactService
     {
@@ -24,7 +26,9 @@ namespace BusinessLogics.Services
 
         public void CreateOrderContact(OrderContact orderContact) => _orderContactRepository.CreateOrderContact(orderContact);
 
+        public List<OrderContact> GetAllOrderContact() => _orderContactRepository.GetAllOrderContact();
 
+        public OrderContact GetOrderContact(int id) => _orderContactRepository.GetOrderContact(id);
 
 
     }
