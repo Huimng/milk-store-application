@@ -32,6 +32,8 @@ builder.Services.AddScoped<IOrderContactRepository, OrderContactRepository>();
 builder.Services.AddScoped<IOrderContactService, OrderContactService>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
+builder.Services.AddScoped<IProductFeedbackRepository, ProductFeedbackRepository>();
+builder.Services.AddScoped<IProductFeedbackService, ProductFeedbackService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

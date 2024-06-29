@@ -27,8 +27,9 @@
                            asp-for="OrderContact.CustomerName"
                            placeholder="Họ và Tên"
                            class="form-control"
+                           value="@Model.AccountName"
                            id="fullname"
-                          >
+                           required>
                     <span asp-validation-for="OrderContact.CustomerName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
