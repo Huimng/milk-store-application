@@ -44,7 +44,7 @@ namespace MilkStore.Pages.User
                 {
                     var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, account.Username),
+                    new Claim(ClaimTypes.Name, account.Name),
                     new Claim(ClaimTypes.Email, account.Email),
                     new Claim("AccountId", account.AccountId.ToString()),
                     new Claim(ClaimTypes.Role, account.Role.ToString())

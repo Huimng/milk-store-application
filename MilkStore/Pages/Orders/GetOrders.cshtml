@@ -5,11 +5,32 @@
 @section StylesGetOrder{
     <link rel="stylesheet" href="~/css/getOrder.css" asp-append-version="true" type="text/css" />
 }
+
+@section Scripts{
+    <script>
+        function openModal(productId, orderId) {
+            document.getElementById('modal-product-id').value = productId;
+            document.getElementById('modal-order-id').value = orderId;
+            document.getElementById('feedbackModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('feedbackModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('feedbackModal')) {
+                closeModal();
+            }
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
 <div class="container">
     <div class="intro-section">
         <p>Xem thông tin chi tiết đơn hàng</p>
     </div>
-
+    <div asp-validation-summary="All" class="text-danger"></div>
     <!-- Thông tin người nhận -->
                 @foreach(var order in Model.ListOrder)
             {
@@ -53,6 +74,7 @@
                         <th scope="col">Số lượng</th>
                         <th scope="col">Đơn giá</th>
                         <th scope="col">Tổng giá</th>
+                            <th scope ="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,6 +90,10 @@
                                 <td>@item.Quantity</td>
                                 <td>@item.Product.Discount.ToString("C")</td>
                                 <td>@item.TotalPrice.ToString("C")</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick="openModal(@item.ProductId,@item.OrderId)">Đánh Giá</button>
+                                </td>
+                                
                     </tr>
                     }
                 </tbody>
@@ -88,5 +114,34 @@
 
 
 </div>
+
+
+<div id="feedbackModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Đánh giá sản phẩm</h2>
+        <form method="post" asp-page-handler="SubmitFeedback">
+            <input type="hidden" id="modal-product-id" name="productId" value="" />
+            <input type="hidden" id="modal-order-id" name="orderId" value="" />
+            <div class="mb-3">
+                <label for="rating" class="form-label">Điểm:</label>
+                <select id="rating" asp-for="ProductFeedback.Point" class="form-control" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Comment:</label>
+                <textarea id="comment" asp-for="ProductFeedback.Comment" class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
 
 
