@@ -54,6 +54,36 @@ namespace MilkStore.Pages.Home
             return Redirect($"/Home/ProductDetail?proId={productId}");
         }
 
+        public IActionResult OnPostBuyNow(int productId, int quantity)
+        {
+            Product product = _productService.GetProduct(productId);
+            // Fetch the product details from your data source
+            var productToCart = new CartItem
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                Price = product.Discount,
+                Quantity = quantity,     //quantity of cart
+                UrlImage = product.UrlImage
+            };
+
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var existingItem = cart.Find(item => item.ProductId == productId);
+            if (existingItem != null)
+            {
+                existingItem.Quantity += quantity;
+            }
+            else
+            {
+                cart.Add(productToCart);
+            }
+
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+
+            return RedirectToPage("/Orders/Index");
+        }
+
         public IActionResult OnPostDelete(int productId)
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();

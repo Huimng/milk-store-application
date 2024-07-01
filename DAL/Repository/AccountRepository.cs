@@ -12,6 +12,10 @@ namespace DAL.Repository
         public void AddAccount(Account account);
         public List<Account> GetAccounts();
         public Account GetAccount(int id);
+        public void UpdateAccount(Account account);
+        public void DeleteAccount(int id);
+        public List<Account> GetAlllAccountAdmin();
+
     }
     public class AccountRepository : IAccountRepository
     {
@@ -74,7 +78,7 @@ namespace DAL.Repository
             {
                 using (var context = new BSADBContext())
                 {
-                    accounts = context.Set<Account>().Where(x => x.Status == true).ToList();
+                    accounts = context.Set<Account>().ToList();
                 }
                 return accounts;
             }
@@ -83,5 +87,67 @@ namespace DAL.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<Account> GetAlllAccountAdmin()
+        {
+            List<Account> accounts = new List<Account>();
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    accounts = context.Set<Account>().Where(a => a.Role != AccountRoles.Admin).ToList();
+                }
+                return accounts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    Account accountOld = context.Set<Account>().FirstOrDefault(x => x.AccountId == account.AccountId);
+                    if (accountOld != null)
+                    {
+                        accountOld.Name = account.Name;
+                        accountOld.Email = account.Email;
+                        accountOld.Username = account.Username;
+                        accountOld.Password = account.Password;
+                        accountOld.Status = account.Status;
+                        accountOld.UpdateDate = DateTime.UtcNow;
+                        context.SaveChanges();
+                    }
+                }
+
+                }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            }
+
+        public void DeleteAccount(int id)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    Account account = context.Set<Account>().FirstOrDefault(x => x.AccountId == id);
+                    if(account != null)
+                    {                       
+                        account.Status = false;
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            }
     }
 }

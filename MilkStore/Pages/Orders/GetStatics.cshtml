@@ -1,0 +1,53 @@
+﻿@page
+@model MilkStore.Pages.Orders.GetStaticsModel
+@{
+    ViewData["Title"] = "Order Statistics";
+}
+<style>
+    .header {
+        background-color: #f4c1c1;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+        .header h1 {
+            color: #ffffff;
+        }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0;
+        display: flex;
+        justify-content: center;
+    }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+</style>
+
+<header class="header">
+    <div class="container">
+        <h1>Baby Store</h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/AccountManager/Index">Account</a></li>
+                <li><a href="/Orders/GetStatics">Statics</a></li>
+                <li><a href="/About">About Us</a></li>
+                <li><a href="/Contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Total Statics: @Model.TotalStatics</p>

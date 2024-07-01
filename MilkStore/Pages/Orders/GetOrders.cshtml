@@ -1,4 +1,5 @@
 ﻿@page
+@using BusinessObjects;
 @model MilkStore.Pages.Orders.GetOrdersModel
 @{
 }
@@ -91,7 +92,11 @@
                                 <td>@item.Product.Discount.ToString("C")</td>
                                 <td>@item.TotalPrice.ToString("C")</td>
                                 <td>
-                                    <button type="button" class="btn btn-danger" onclick="openModal(@item.ProductId,@item.OrderId)">Đánh Giá</button>
+                                    @if (order.Status.Equals(OrderStatus.Succeeded))
+                                    {
+                                        <button type="button" class="btn btn-danger" onclick="openModal(@item.ProductId,@item.OrderId)">Đánh Giá</button>
+                                    }
+                                    
                                 </td>
                                 
                     </tr>
@@ -101,6 +106,15 @@
             <div class="text-start mt-3">
                     <h4 class="header-text text-end">Tổng giá: @order.GrandTotal.ToString("C")</h4>
             </div>
+                @if (order.Status.Equals(OrderStatus.Pending)){
+            <div class="text-start mt-3">
+                <form method="post" asp-page-handler="OrderCancel">
+                  <input type="hidden" name="orderId" value="@order.OrderId" />
+                  <button type="submit" class="btn btn-primary">Hủy bỏ đơn hàng</button>
+                </form>
+                   
+            </div>
+                }
         </div>
 
         

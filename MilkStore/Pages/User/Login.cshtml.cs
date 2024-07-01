@@ -39,9 +39,9 @@ namespace MilkStore.Pages.User
             {
                 var account =  _accountService.GetAccounts()
                     .FirstOrDefault(a => a.Username == Input.Username && a.Password == Input.Password);
-
-                if (account != null)
+                if (account != null && account.Status == true)
                 {
+
                     var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, account.Name),
@@ -64,7 +64,14 @@ namespace MilkStore.Pages.User
                     Response.Cookies.Append("Username", account.Username, cookieOptions);
                     if (account.Role == AccountRoles.Member)
                     {
-                        return RedirectToPage("/User/ProfileMember");
+                        return RedirectToPage("/Home/Product");
+                    }else if (account.Role == AccountRoles.Staff)
+                    {
+                        return RedirectToPage("/Orders/GetOrdersStaff");
+                    }
+                    else
+                    {
+                        return RedirectToPage("/AccountManager/Index");
                     }
                 }
                 else
