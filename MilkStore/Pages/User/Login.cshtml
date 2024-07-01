@@ -22,6 +22,7 @@
         <div class="login-box">
             <h2 class="text-center">Baby Store</h2>
             <form method="post" class="w-100">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="input-group">
                     <label asp-for="Input.Username"></label>
                     <input asp-for="Input.Username" class="form-control" />

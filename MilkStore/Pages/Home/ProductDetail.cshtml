@@ -44,21 +44,25 @@
                         <p>Brand: @Product.Brand</p>
                         <p>Quantity: @Product.Quantity</p>
                         <p>Status: <span class="status @(Product.Status == ProductStatus.Available ? "available" : "out-of-stock")">@Product.Status</span></p>
-                        <form method="post">
-                            <input type="hidden" name="productId" value="@Product.ProductId" />
-                            <div class="form-group">
-                                <label for="quantity">Quantity</label>
-                                <div class="quantity-selector">
-                                    <button type="button" onclick="changeQuantity(-1)">-</button>
-                                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="@Product.Quantity" readonly />
-                                    <button type="button" onclick="changeQuantity(1)">+</button>
+                        @if (Product.Quantity != 0)
+                        {
+                            <form method="post">
+                                <input type="hidden" name="productId" value="@Product.ProductId" />
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <div class="quantity-selector">
+                                        <button type="button" onclick="changeQuantity(-1)">-</button>
+                                        <input type="number" name="quantity" id="quantity" value="1" min="1" max="@Product.Quantity" readonly />
+                                        <button type="button" onclick="changeQuantity(1)">+</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="product-order">
-                                <button type="submit" formaction="/Home/Cart?handler=AddToCart" onclick="showAddToCartMessage()">Add to Cart</button>
-                                <button type="submit" formaction="/Home/ProductDetail?handler=BuyNow">Buy Now</button>
-                            </div>
-                        </form>
+                                <div class="product-order">
+                                    <button type="submit" formaction="/Home/Cart?handler=AddToCart" onclick="showAddToCartMessage()">Add to Cart</button>
+                                    <button type="submit" formaction="/Home/Cart?handler=BuyNow">Buy Now</button>
+                                </div>
+                            </form>
+                        }
+                       
                     </div>
                 </div>
             </div>

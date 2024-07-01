@@ -1,0 +1,99 @@
+﻿@page
+@using BusinessObjects;
+@model MilkStore.Pages.ProductManager.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Product.ProductId" />
+            <input type="hidden" asp-for="Product.UrlImage" />
+            <div class="form-group">
+                <label asp-for="Product.ProductName" class="control-label"></label>
+                <input asp-for="Product.ProductName" class="form-control" required />
+                <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.ProductCode" class="control-label"></label>
+                <input asp-for="Product.ProductCode" class="form-control" required />
+                <span asp-validation-for="Product.ProductCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Description" class="control-label"></label>
+                <input asp-for="Product.Description" class="form-control" required />
+                <span asp-validation-for="Product.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Quantity" class="control-label"></label>
+                <input asp-for="Product.Quantity" class="form-control" required />
+                <span asp-validation-for="Product.Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Brand" class="control-label"></label>
+                <input asp-for="Product.Brand" class="form-control" required />
+                <span asp-validation-for="Product.Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <img src="/uploads/@Model.Product.UrlImage" alt="Product Image" class="img-fluid">
+            </div>
+            <div class="form-group row">
+                <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="custom-file">
+                        <input asp-for="Photo" class="custom-file-input form-control">
+                        <label class="custom-file-label">Click here to change photo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Status" class="control-label"></label>
+                <select asp-for="Product.Status" class="form-control" asp-items="Html.GetEnumSelectList<ProductStatus>()"></select>
+                <span asp-validation-for="Product.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.Discount" class="control-label"></label>
+                <input asp-for="Product.Discount" class="form-control" type="number" step="0.01" required />
+                <span asp-validation-for="Product.Discount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+
+            });
+        });
+    </script>
+
+}
+
+<style>
+    img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+</style>

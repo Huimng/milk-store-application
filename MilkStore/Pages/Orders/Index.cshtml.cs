@@ -29,13 +29,14 @@ namespace MilkStore.Pages.Orders
         private readonly IOrderService _orderService;
 
         private readonly IOrderDetailService _orderDetailService;
-
+        private readonly IProductService _productService;
 
         public IndexModel(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _orderContactService = serviceProvider.GetRequiredService<IOrderContactService>();
             _orderService = serviceProvider.GetRequiredService<IOrderService>();
             _orderDetailService = serviceProvider.GetRequiredService<IOrderDetailService>();
+            _productService = serviceProvider.GetRequiredService<IProductService>();
         }
 
         public void OnGet()
@@ -103,13 +104,15 @@ namespace MilkStore.Pages.Orders
                     orderDetail.UpdatedDate = DateTime.UtcNow;
                     orderDetail.ProductId = item.ProductId;
                     _orderDetailService.CreateOrderDetail(orderDetail);
+                    _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
                 }
 
 
                 HttpContext.Session.Remove("Cart");
 
 
-             RedirectToPage("/Home/Product");
+            Response.Redirect("/Home/Product");
+            return;
             //}
             //else
             //{

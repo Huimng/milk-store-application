@@ -1,0 +1,123 @@
+﻿@page
+@model MilkStore.Pages.AccountManager.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .header {
+        background-color: #f4c1c1;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+        .header h1 {
+            color: #ffffff;
+        }
+
+    .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0;
+        display: flex;
+        justify-content: center;
+    }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+</style>
+
+<header class="header">
+    <div class="container">
+        <h1>Baby Store</h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/AccountManager/Index">Account</a></li>
+                <li><a href="/Orders/GetStatics">Statics</a></li>
+                <li><a href="/About">About Us</a></li>
+                <li><a href="/Contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].UpdateDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Account) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDate)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.AccountId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AccountId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.AccountId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

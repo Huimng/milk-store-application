@@ -85,5 +85,11 @@ namespace MilkStore.Pages.Orders
                 return RedirectToPage("/Orders/GetOrders"); 
             }
         }
+
+        public IActionResult OnPostOrderCancel(int orderId)
+        {
+            _orderService.UpdateOrderCancel(orderId);
+            return RedirectToPage("/Orders/GetOrders");
+        }
     }
 }
