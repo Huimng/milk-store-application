@@ -40,16 +40,16 @@ body {
         font-weight: 500;
     }
 
-.order-details {
+.payment-order {
     padding: 60px 20px;
 }
 
-    .order-details h2 {
+    .payment-order h2 {
         text-align: center;
         margin-bottom: 40px;
     }
 
-    .order-details h3 {
+    .payment-order h3 {
         margin-bottom: 20px;
     }
 
@@ -57,26 +57,20 @@ body {
     margin-bottom: 15px;
 }
 
-.product-info {
-    display: flex;
-    align-items: center;
-}
-
-.product-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-}
-
 .order-total {
     text-align: right;
     margin-top: 20px;
 }
 
-.order-actions {
-    padding: 40px 0;
-    background-color: #f4f4f4;
+.footer {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
 }
+
+    .footer p {
+        color: #ffffff;
+    }
 
 .btn-primary {
     background-color: #6CA6CD;
@@ -87,35 +81,8 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin: 0 10px;
 }
 
     .btn-primary:hover {
         background-color: #5c92b1;
-    }
-
-.btn-secondary {
-    background-color: #ddd;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: #333;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0 10px;
-}
-
-    .btn-secondary:hover {
-        background-color: #ccc;
-    }
-
-.footer {
-    background-color: #f4c1c1;
-    padding: 20px 0;
-    text-align: center;
-}
-
-    .footer p {
-        color: #ffffff;
     }
