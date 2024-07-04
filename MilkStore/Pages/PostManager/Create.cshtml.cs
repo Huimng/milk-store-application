@@ -10,6 +10,7 @@ using DAL;
 using BusinessLogics.Services;
 using DAL.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 
 namespace MilkStore.Pages.PostManager
 {
@@ -49,8 +50,11 @@ namespace MilkStore.Pages.PostManager
             {
                 return Page();
             }
+            var username = Request.Cookies["Username"];
+            int id = _accountService.GetAccountByUserName(username).AccountId;
+            Post.CreateBy = id;
             Post.Status = PostStatuses.Pending;
-            Post.CreateDate = DateTime.UtcNow;
+            Post.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             postService.AddPost(Post);
 
             return RedirectToPage("./Index");

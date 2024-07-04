@@ -61,7 +61,6 @@ namespace MilkStore.Pages.PostManager
             try
             {
                 // Ensure the CreateDate is set correctly
-                Post.CreateDate = DateTime.SpecifyKind(Post.CreateDate, DateTimeKind.Utc);
 
                 // Ensure CreateBy is not modified but is valid for initial creation
                 var existingPost = postService.GetPost(Post.PostId);
@@ -79,7 +78,18 @@ namespace MilkStore.Pages.PostManager
                         ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "Brand");
                         return Page();
                     }
+                   
                 }
+                var username = Request.Cookies["Username"];
+                int id = _accountService.GetAccountByUserName(username).AccountId;
+                if (existingPost.CreateBy != id)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid CreateBy value. Account cannot manage this post.");
+                    return Page();
+                }
+                Post.CreateDate = existingPost.CreateDate;
+
+
 
                 postService.UpdatePost(Post);
             }
