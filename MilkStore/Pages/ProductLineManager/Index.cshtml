@@ -1,0 +1,42 @@
+﻿@page
+@model MilkStore.Pages.ProductLineManager.IndexModel
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductLine[0].ExpireDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductLine[0].AgeGroup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductLine[0].Product)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ProductLine) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpireDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeGroup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Brand)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ProductLineId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ProductLineId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ProductLineId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
