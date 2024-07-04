@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MilkStore.Pages.CommentPost
 {
@@ -15,11 +16,14 @@ namespace MilkStore.Pages.CommentPost
     {
         private CommentService commentService;
         private PostService postService;
+        private IAccountService _accountService;
 
-        public CreateModel()
+
+        public CreateModel(IServiceProvider serviceProvider)
         {
             commentService = new CommentService();
             postService = new PostService();
+            _accountService = serviceProvider.GetRequiredService<IAccountService>()
         }
 
         public IActionResult OnGet()
@@ -38,6 +42,9 @@ namespace MilkStore.Pages.CommentPost
             {
                 return Page();
             }
+            var username = Request.Cookies["Username"];
+            int id = _accountService.GetAccountByUserName(username).AccountId;
+            Comment.
             Comment.CreateDate = DateTime.UtcNow;
             commentService.Comment(Comment);
             
