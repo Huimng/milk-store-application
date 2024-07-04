@@ -56,7 +56,23 @@ namespace DAL.Repository
         }
         public void UpdatePost(Post post)
         {
-            dbContext.Posts.Add(post);
+            var trackedEntity = dbContext.ChangeTracker.Entries<Post>()
+                                  .FirstOrDefault(e => e.Entity.PostId == post.PostId);
+            if (trackedEntity != null)
+            {
+                dbContext.Entry(trackedEntity.Entity).State = EntityState.Detached;
+            }
+
+            var existingPost = dbContext.Posts.FirstOrDefault(p => p.PostId == post.PostId);
+            if (existingPost != null)
+            {
+                dbContext.Entry(existingPost).CurrentValues.SetValues(post);
+            }
+            else
+            {
+                dbContext.Posts.Add(post);
+            }
+
             dbContext.SaveChanges();
         }
 

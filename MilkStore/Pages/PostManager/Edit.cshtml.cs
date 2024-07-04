@@ -18,14 +18,12 @@ namespace MilkStore.Pages.PostManager
         private PostService postService;
         private IProductService _productService;
         private IAccountService _accountService;
-        private readonly BSADBContext _context;
 
         public EditModel(IServiceProvider serviceProvider)
         {
             postService = new PostService();
             _productService = serviceProvider.GetRequiredService<IProductService>();
             _accountService = serviceProvider.GetRequiredService<IAccountService>();
-            _context = new BSADBContext();
         }
 
         [BindProperty]
@@ -38,15 +36,15 @@ namespace MilkStore.Pages.PostManager
                 return NotFound();
             }
 
-            Post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(m => m.PostId == id);
-            ViewData["CreateBy"] = new SelectList(_accountService.GetAccounts(), "AccountId", "Name");
-            ViewData["PostStatuses"] = new SelectList(Enum.GetValues(typeof(PostStatuses)));
-            ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "Brand");
-
+            Post = postService.GetPost(id);
             if (Post == null)
             {
                 return NotFound();
             }
+
+            ViewData["CreateBy"] = new SelectList(_accountService.GetAccounts(), "AccountId", "Name");
+            ViewData["PostStatuses"] = new SelectList(Enum.GetValues(typeof(PostStatuses)));
+            ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "Brand");
 
             return Page();
         }
@@ -60,17 +58,30 @@ namespace MilkStore.Pages.PostManager
                 return Page();
             }
 
-            var existingPost = await _context.Posts.FindAsync(Post.PostId);
-            if (existingPost != null)
-            {
-                _context.Entry(existingPost).State = EntityState.Detached;
-            }
-            _context.Attach(Post).State = EntityState.Modified;
-            _context.Entry(Post).Property(x => x.CreateDate).IsModified = false;
-            _context.Entry(Post).Property(x => x.CreateBy).IsModified = false;
             try
             {
-                await _context.SaveChangesAsync();
+                // Ensure the CreateDate is set correctly
+                Post.CreateDate = DateTime.SpecifyKind(Post.CreateDate, DateTimeKind.Utc);
+
+                // Ensure CreateBy is not modified but is valid for initial creation
+                var existingPost = postService.GetPost(Post.PostId);
+                if (existingPost != null)
+                {
+                    Post.CreateBy = existingPost.CreateBy; // Preserve the original CreateBy value
+                }
+                else
+                {
+                    if (_accountService.GetAccount(Post.CreateBy) == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid CreateBy value. Account does not exist.");
+                        ViewData["CreateBy"] = new SelectList(_accountService.GetAccounts(), "AccountId", "Name");
+                        ViewData["PostStatuses"] = new SelectList(Enum.GetValues(typeof(PostStatuses)));
+                        ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "Brand");
+                        return Page();
+                    }
+                }
+
+                postService.UpdatePost(Post);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -88,7 +99,7 @@ namespace MilkStore.Pages.PostManager
         }
         private bool PostExists(int id)
         {
-            return _context.Posts.Any(e => e.PostId == id);
+            return postService.GetPost(id) != null;
         }
 
     }    
