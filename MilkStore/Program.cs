@@ -20,7 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/User/Login";
-         options.AccessDeniedPath = "/User/Login";
+        options.AccessDeniedPath = "/User/Login";
     }
     );
 // builder.Services.AddDbContext<BSADBContext>(options =>
