@@ -1,61 +1,78 @@
 ﻿@page
 @model MilkStore.Pages.PostManager.IndexModel
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].Contents)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].Account)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListPost[0].Product)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ListPost)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contents)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Brand)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.PostId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.PostId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.PostId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Store - Post Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/post.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/Products">Products</a></li>
+                    <li><a asp-page="/Posts">Posts</a></li>
+                    <li><a asp-page="/About">About Us</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="post-section">
+            <h2>Post Manager</h2>
+            <p>
+                <a asp-page="Create" class="btn btn-primary">Create New</a>
+            </p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].Title)</th>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].Contents)</th>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].CreateDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].Status)</th>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].Account)</th>
+                        <th>@Html.DisplayNameFor(model => model.ListPost[0].Product)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListPost)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Contents)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Account.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Product.Brand)</td>
+                            <td>
+                                <a asp-page="./Edit" asp-route-id="@item.PostId" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a asp-page="./Details" asp-route-id="@item.PostId" class="btn btn-sm btn-outline-secondary">Details</a>
+                                <a asp-page="./Delete" asp-route-id="@item.PostId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

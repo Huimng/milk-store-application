@@ -1,13 +1,145 @@
 ﻿@page
+@using BusinessObjects;
 @model MilkStore.Pages.Orders.GetOrdersStaffModel
 @{
+    ViewData["Title"] = "Order Details for Staff";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/getOrder.css" asp-append-version="true" type="text/css" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Orders/GetOrdersStaff">Orders</a></li>
+                    <li><a href="/ProductManager">Products</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    @section StylesGetOrder{
-        <link rel="stylesheet" href="~/css/getOrder.css" asp-append-version="true" type="text/css" />
-    }
-    @section Scripts{
+    <main>
+        <div class="container">
+            <div class="intro-section">
+                <p>View Order Details</p>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Order Details -->
+            @foreach (var order in Model.ListOrder)
+            {
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h2 class="product-header">Shipping Information</h2>
+                        <div class="mb-3">
+                            <p class="form-label">Order Date: @order.CreatedDate</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Order Status: @order.Status</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Full Name: @order.OrderContact.CustomerName </p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Phone Number:  @order.OrderContact.Phone</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Address:  @order.Address</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Shipping Method: @order.Type </p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="form-label">Payment Method: @order.PaymentMethod </p>
+                        </div>
+                    </div>
+
+                    <!-- Ordered Products -->
+                    <div class="col-md-6">
+                        <h2 class="product-order">Ordered Products</h2>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-start">Product</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Unit Price</th>
+                                    <th scope="col">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in order.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="product-info">
+                                                <img src="/uploads/@item.Product.UrlImage" alt="Product Image" class="product-image">
+                                                <span class="product-name">@item.Product.ProductName</span>
+                                            </div>
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Product.Discount.ToString("C")</td>
+                                        <td>@item.TotalPrice.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="text-end mt-3">
+                            <h4 class="header-text">Total: @order.GrandTotal.ToString("C")</h4>
+                        </div>
+                        <div class="text-start mt-3">
+                            <button type="button" class="btn btn-primary" onclick="openModal(@order.OrderId,'@order.OrderContact.CustomerName','@order.OrderContact.Phone','@order.Address','@order.Status')">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="order-divider" />
+            }
+        </div>
+    </main>
+
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Update Order</h2>
+            <form method="post" asp-page-handler="UpdateOrder">
+                <input type="hidden" id="modal-order-id" name="OrderId" value="" />
+                <div class="mb-3">
+                    <label for="modal-customer-name" class="form-label">Name:</label>
+                    <input type="text" id="modal-customer-name" name="OrderContact.CustomerName" class="form-control" value="" />
+                </div>
+                <div class="mb-3">
+                    <label for="modal-phone" class="form-label">Phone:</label>
+                    <input type="text" id="modal-phone" name="OrderContact.Phone" class="form-control" value="" />
+                </div>
+                <div class="mb-3">
+                    <label for="modal-address" class="form-label">Address:</label>
+                    <input type="text" id="modal-address" name="Address" class="form-control" value="" />
+                </div>
+                <div class="mb-3">
+                    <label for="modal-status" class="form-label">Status:</label>
+                    <select id="modal-status" name="Status" class="form-control" required>
+                        <option value="Pending">Pending</option>
+                        <option value="Canceled">Canceled</option>
+                        <option value="Delivering">Delivering</option>
+                        <option value="Failed">Failed</option>
+                        <option value="Succeeded">Succeeded</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
         <script>
             function openModal(orderId, customerName, phone, address, status) {
                 document.getElementById('modal-order-id').value = orderId;
@@ -30,175 +162,5 @@
         </script>
         <partial name="_ValidationScriptsPartial" />
     }
-    <style>
-    .header {
-        background-color: #f4c1c1;
-        padding: 20px 0;
-        text-align: center;
-    }
-
-        .header h1 {
-            color: #ffffff;
-        }
-
-    .nav-links {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0 0;
-        display: flex;
-        justify-content: center;
-    }
-
-        .nav-links li {
-            margin: 0 15px;
-        }
-
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-    </style>
-
-<header class="header">
-    <div class="container">
-        <h1>Baby Store</h1>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/Orders/GetOrdersStaff">Order</a></li>
-                <li><a href="/ProductManager">Products</a></li>
-                <li><a href="/About">About Us</a></li>
-                <li><a href="/Contact">Contact</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-<div class="container">
-    <div class="intro-section">
-        <p>Xem thông tin chi tiết đơn hàng</p>
-    </div>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <!-- Thông tin người nhận -->
-    @foreach (var order in Model.ListOrder)
-    {
-        <div class="row">
-            <div class="col-md-6">
-                <h2 class="product-header">Thông tin người nhận</h2>
-                <div class="mb-3">
-                    <p class="form-label">Ngày tạo: @order.CreatedDate</p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">
-                        Trạng thái đơn hàng: @order.Status
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">Họ và tên: @order.OrderContact.CustomerName </p>
-                </div>
-                <!-- Các trường thông tin khác -->
-                <div class="mb-3">
-                    <p class="form-label">Số điện thoại:  @order.OrderContact.Phone</p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">Địa chỉ:  @order.Address</p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">Phương thức vận chuyển: @order.Type </p>
-                </div>
-                <div class="mb-3">
-                    <p class="form-label">Phương thức thanh toán: @order.PaymentMethod </p>
-                </div>
-
-
-            </div>
-
-            <!-- Sản phẩm đã đặt hàng -->
-            <div class="col-md-6">
-                <h2 class="product-order">Sản phẩm đã đặt hàng</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-start">Sản phẩm</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Đơn giá</th>
-                            <th scope="col">Tổng giá</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in order.OrderDetails)
-                        {
-                            <tr>
-                                <td>
-                                    <div class="product-info">
-                                        <img src="/uploads/@item.Product.UrlImage" alt="Product Image" class="product-image">
-                                        <span class="product-name">@item.Product.ProductName</span>
-                                    </div>
-                                </td>
-                                <td>@item.Quantity</td>
-                                <td>@item.Product.Discount.ToString("C")</td>
-                                <td>@item.TotalPrice.ToString("C")</td>
-
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <div class="text-start mt-3">
-                    <h4 class="header-text text-end">Tổng giá: @order.GrandTotal.ToString("C")</h4>
-                </div>
-                <div class="text-start mt-3">
-                    <button type="button" class="btn btn-danger" onclick="openModal(@order.OrderId,'@order.OrderContact.CustomerName','@order.OrderContact.Phone','@order.Address','@order.Status')">Update</button>
-                </div>
-            </div>
-
-
-        </div>
-        <br />
-        <br />
-        <hr width="100%" size="7px" align="center" color="red" />
-        <br />
-        <br />
-    }
-
-
-</div>
-
-<div id="feedbackModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Cập nhật sản phẩm</h2>
-        <form method="post" asp-page-handler="UpdateOrder">
-            <input type="hidden" id="modal-order-id" asp-for="CurrentOrder.OrderId"  value="" />
-            <div class="mb-3">
-            <label for="modal-customer-name" class="form-label">Name:</label>
-                <input type="text" id="modal-customer-name" asp-for="CurrentOrder.OrderContact.CustomerName"  value="" />
-            </div>
-            <div class="mb-3">
-             <label for="modal-phone" class="form-label">Phone:</label>
-                <input type="text" id="modal-phone" asp-for="CurrentOrder.OrderContact.Phone" value="" />
-            </div>          
-            <div class="mb-3">
-                <label for="address" class="form-label">Address:</label>
-                <input type="text" id="modal-address" asp-for="CurrentOrder.Address" value="" />
-            </div>
-            <div class="mb-3">
-                <label for="status" class="form-label">Status:</label>
-                <select id="modal-status" asp-for="CurrentOrder.Status" class="form-control" required>
-                    <option value="Pending">Pending</option>
-                    <option value="Canceled">Canceled</option>
-                    <option value="Delivering">Delivering</option>
-                    <option value="Failed">Failed</option>
-                    <option value="Succeeded">Succeeded</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
+</body>
+</html>
