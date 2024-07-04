@@ -7,28 +7,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAL;
+using BusinessLogics.Services;
 
 namespace MilkStore.Pages.CommentPost
 {
     public class DetailsModel : PageModel
     {
-        private readonly DAL.BSADBContext _context;
+        private CommentService commentService;
 
-        public DetailsModel(DAL.BSADBContext context)
+        public DetailsModel()
         {
-            _context = context;
+            commentService = new CommentService();
         }
 
       public Comment Comment { get; set; } = default!; 
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _context.Comments == null)
+            if (id == null || commentService == null)
             {
                 return NotFound();
             }
 
-            var comment = await _context.Comments.FirstOrDefaultAsync(m => m.CommentId == id);
+            var comment = commentService.GetComment(id);
             if (comment == null)
             {
                 return NotFound();
