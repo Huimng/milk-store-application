@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.CommentPost
 {
     public class DetailsModel : PageModel
     {
         private readonly CommentService commentService;
-
-        public DetailsModel()
+        private readonly IHubContext<ChatHub> _hub;
+        public DetailsModel(IHubContext<ChatHub> hub)
         {
             commentService = new CommentService();
+            _hub = hub;
         }
 
       public Comment Comment { get; set; } = default!; 
@@ -38,6 +41,7 @@ namespace MilkStore.Pages.CommentPost
             {
                 Comment = comment;
             }
+            await _hub.Clients.All.SendAsync("Loading");
             return Page();
         }
     }

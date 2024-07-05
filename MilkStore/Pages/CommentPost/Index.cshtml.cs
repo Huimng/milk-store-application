@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.CommentPost
 {
@@ -15,22 +17,25 @@ namespace MilkStore.Pages.CommentPost
     {
         private CommentService commentService;
         private PostService postService;
-
-        public IndexModel()
+        private readonly IHubContext<ChatHub> _hub;
+        public IndexModel(IHubContext<ChatHub> hub)
         {
             commentService = new CommentService();
             postService = new PostService();
+            _hub = hub;
         }
 
         public IList<Comment> Comment { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
+            await _hub.Clients.All.SendAsync("Loading");
             Comment = commentService.GetComments();
             foreach (var comment in Comment)
             {
                 comment.Post = postService.GetPost(comment.PostId);
             }
+            await _hub.Clients.All.SendAsync("Loading");
         }
     }
 }

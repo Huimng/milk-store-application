@@ -19,6 +19,9 @@ namespace BusinessLogics.Services
         public List<Account> GetAlllAccountAdmin();
 
         public Account GetAccountByUserName(string username);
+        public List<Account> GetAlllAccountStaff();
+        public List<Account> GetAlllAccountCustomer();
+
     }
     public class AccountService : IAccountService
     {
@@ -41,5 +44,8 @@ namespace BusinessLogics.Services
         public List<Account> GetAlllAccountAdmin() => _accountRepository.GetAlllAccountAdmin();
 
         public Account GetAccountByUserName(string username) => _accountRepository.GetAccountByUserName(username);
+
+        public List<Account> GetAlllAccountStaff() => _accountRepository.GetAlllStaff();
+        public List<Account> GetAlllAccountCustomer() => _accountRepository.GetAllMember();
     }
 }

@@ -11,6 +11,8 @@ using BusinessLogics.Services;
 using DAL.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.PostManager
 {
@@ -21,15 +23,16 @@ namespace MilkStore.Pages.PostManager
         private ProductRepository productRepository;
         private IProductService _productService;
         private IAccountService _accountService;
+        private readonly IHubContext<ChatHub> _hub;
 
-
-        public CreateModel(IServiceProvider serviceProvider)
+        public CreateModel(IServiceProvider serviceProvider, IHubContext<ChatHub> hub)
         {
             postService = new PostService();
             accountRepository = new AccountRepository();
             productRepository = new ProductRepository();
             _productService = serviceProvider.GetRequiredService<IProductService>();
             _accountService = serviceProvider.GetRequiredService<IAccountService>();
+            _hub = hub;
         }
 
         public IActionResult OnGet()
@@ -56,7 +59,7 @@ namespace MilkStore.Pages.PostManager
             Post.Status = PostStatuses.Pending;
             Post.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             postService.AddPost(Post);
-
+            await _hub.Clients.All.SendAsync("Loading");
             return RedirectToPage("./Index");
         }
     }
