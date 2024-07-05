@@ -9,6 +9,8 @@ using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.CommentPost
 {
@@ -17,18 +19,20 @@ namespace MilkStore.Pages.CommentPost
         private CommentService commentService;
         private PostService postService;
         private IAccountService _accountService;
+        private readonly IHubContext<ChatHub> _hub;
 
-
-        public CreateModel(IServiceProvider serviceProvider)
+        public CreateModel(IServiceProvider serviceProvider, IHubContext<ChatHub> hub)
         {
             commentService = new CommentService();
             postService = new PostService();
             _accountService = serviceProvider.GetRequiredService<IAccountService>();
+            _hub = hub;
         }
 
         public IActionResult OnGet()
         {
             ViewData["PostId"] = new SelectList(postService.GetPosts(), "PostId", "Title");
+
             return Page();
         }
 
@@ -46,7 +50,7 @@ namespace MilkStore.Pages.CommentPost
             int id = _accountService.GetAccountByUserName(username).AccountId;
             Comment.CreateDate = DateTime.UtcNow;
             commentService.Comment(Comment);
-            
+            await _hub.Clients.All.SendAsync("Loading");
 
             return RedirectToPage("./Index");
         }

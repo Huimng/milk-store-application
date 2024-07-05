@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.CommentPost
 {
     public class DeleteModel : PageModel
     {
         private CommentService commentService;
-
-        public DeleteModel()
+        private readonly IHubContext<ChatHub> _hub;
+        public DeleteModel(IHubContext<ChatHub> hub)
         {
             commentService = new CommentService();
+            _hub = hub;
         }
 
         [BindProperty]
@@ -49,7 +52,7 @@ namespace MilkStore.Pages.CommentPost
                 return NotFound();
             }
             commentService.DeleteComment(id);
-
+            await _hub.Clients.All.SendAsync("Loading");
             return RedirectToPage("./Index");
         }
     }
