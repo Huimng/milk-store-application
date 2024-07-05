@@ -54,11 +54,6 @@ namespace MilkStore.Pages.ProductManager
             //{
             //    return Page();
             //}
-            if (Product.Quantity < 0)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Quantity.");
-                return Page();
-            }
             if (Product.Discount < 0)
             {
                 ModelState.AddModelError(string.Empty, "Invalid Price.");

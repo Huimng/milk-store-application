@@ -1,8 +1,11 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DAL.Repository
@@ -16,6 +19,8 @@ namespace DAL.Repository
         public void DeleteProduct(int id);
         public List<Product> GetAllProductStaff();
         public void UpdateQuantityProduct(int idProduct, int quantity);
+        public void UpdateQuantityFromProductLine(int idProduct, int quantity);
+        public List<ProductLineSummary> GetAllExpireDate(int idProduct);
     }
     public class ProductRepository : IProductRepository
     {
@@ -58,13 +63,39 @@ namespace DAL.Repository
             }
         }
 
+        public List<ProductLineSummary> GetAllExpireDate(int idProduct)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                var result = context.Set<ProductLine>()
+               .Where(pl => pl.ProductId == idProduct)
+               .GroupBy(pl => new { pl.ExpireDate, pl.AgeGroup })
+               .Select(g => new ProductLineSummary
+               {
+                   Quantity = g.Count(),
+                   ExpireDate = g.Key.ExpireDate,
+                   AgeGroup = g.Key.AgeGroup
+               })
+               .ToList();
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public Product GetProduct(int id)
         {
             try
             {
                 using (var context = new BSADBContext())
                 {
-                    var _product = context.Set<Product>().FirstOrDefault(x => x.ProductId == id);
+                    var _product = context.Set<Product>().Include(x=>x.ProductLines).FirstOrDefault(x => x.ProductId == id);
 
                     return _product;
                 }
@@ -114,7 +145,6 @@ namespace DAL.Repository
                         productOld.ProductName = product.ProductName;
                         productOld.ProductCode = product.ProductCode;
                         productOld.Description = product.Description;
-                        productOld.Quantity = product.Quantity;
                         productOld.Brand = product.Brand;
                         productOld.UrlImage = product.UrlImage;
                         productOld.Status = product.Status;
@@ -154,6 +184,57 @@ namespace DAL.Repository
 
         public void UpdateQuantityProduct(int idProduct, int quantity)
         {
+            using (var context = new BSADBContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var product = context.Set<Product>().Include(p => p.ProductLines).FirstOrDefault(p => p.ProductId == idProduct);
+                        if (product == null)
+                        {
+                            throw new InvalidOperationException($"Product with ID {idProduct} not found.");
+                        }
+
+                        if (product.Quantity < quantity)
+                        {
+                            throw new InvalidOperationException("Insufficient product quantity.");
+                        }
+
+                        product.Quantity -= quantity;
+                        if (product.Quantity == 0)
+                        {
+                            product.Status = ProductStatus.OutOfStock;
+                        }
+
+                        var productLinesToRemove = context.Set<ProductLine>()
+                            .Where(pl => pl.ProductId == idProduct)
+                            .OrderBy(pl => pl.ExpireDate)
+                            .Take(quantity)
+                            .ToList();
+
+                        if (productLinesToRemove.Count < quantity)
+                        {
+                            throw new InvalidOperationException("Insufficient product lines available.");
+                        }
+
+                        context.ProductLines.RemoveRange(productLinesToRemove);
+
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+    
+
+        public void UpdateQuantityFromProductLine(int idProduct, int quantity)
+        {
             try
             {
                 using (var context = new BSADBContext())
@@ -161,10 +242,10 @@ namespace DAL.Repository
                     Product product = context.Set<Product>().FirstOrDefault(x => x.ProductId == idProduct);
                     if (product != null)
                     {
-                        product.Quantity = product.Quantity - quantity;
-                        if(product.Quantity == 0)
+                        product.Quantity = product.Quantity + quantity;
+                        if(product.Quantity != 0)
                         {
-                            product.Status = ProductStatus.OutOfStock;
+                            product.Status = ProductStatus.Available;
                         }
                         context.SaveChanges();
                     }

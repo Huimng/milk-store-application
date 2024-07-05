@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Models;
 using DAL.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +19,8 @@ namespace BusinessLogics.Services
         public void DeleteProduct(int id);
         public List<Product> GetAllProductStaff();
         public void UpdateQuantityProduct(int idProduct, int quantity);
+        public void UpdateQuantityFromProductLine(int idProduct, int quantity);
+        public List<ProductLineSummary> GetAllExpireDate(int idProduct);
     }
     public class ProductService: IProductService
     {
@@ -35,5 +38,7 @@ namespace BusinessLogics.Services
         public void DeleteProduct(int id) => _productRepository?.DeleteProduct(id);
         public List<Product> GetAllProductStaff() => _productRepository.GetAllProductStaff();
         public void UpdateQuantityProduct(int idProduct, int quantity) => _productRepository.UpdateQuantityProduct(idProduct, quantity);
+        public void UpdateQuantityFromProductLine(int idProduct, int quantity) => _productRepository.UpdateQuantityFromProductLine(idProduct, quantity);
+        public List<ProductLineSummary> GetAllExpireDate(int idProduct) => _productRepository.GetAllExpireDate(idProduct);
     }
 }

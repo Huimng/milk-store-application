@@ -42,11 +42,6 @@ namespace MilkStore.Pages.ProductManager
           {
                 return Page();
           }
-            if (Product.Quantity < 0)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Quantity.");
-                return Page();
-            }
             if (Product.Discount < 0)
             {
                 ModelState.AddModelError(string.Empty, "Invalid Price.");
@@ -57,6 +52,7 @@ namespace MilkStore.Pages.ProductManager
             {
                 Product.UrlImage = ProcessUploadedFile();
             }
+            Product.Quantity = 0;
             Product.CreatedDate = DateTime.UtcNow;
             _productService.CreateProduct(Product);
 
