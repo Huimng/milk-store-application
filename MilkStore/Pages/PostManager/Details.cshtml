@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int}"
 @model MilkStore.Pages.PostManager.DetailsModel
 
 <!DOCTYPE html>
@@ -11,20 +11,7 @@
     <link rel="stylesheet" href="/css/posts.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1>Baby Store</h1>
-            <nav>
-                <ul class="nav-links">
-                    <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/Products">Products</a></li>
-                    <li><a asp-page="/Posts">Posts</a></li>
-                    <li><a asp-page="/About">About Us</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    
 
     <main class="container">
         <section class="post-section">
@@ -54,38 +41,37 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Post.Status)
                 </dd>
-                @* Uncomment if needed
+                @* Uncomment if needed *@
                 <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Post.Account)
+                    @Html.DisplayNameFor(model => model.Post.Account)
                 </dt>
                 <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Post.Account)
+                    @Html.DisplayFor(model => model.Post.Account)
                 </dd>
                 <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Post.ProductId)
+                    @Html.DisplayNameFor(model => model.Post.ProductId)
                 </dt>
                 <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Post.ProductId)
+                    @Html.DisplayFor(model => model.Post.ProductId)
                 </dd>
-                *@
             </dl>
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Comment[0].Content)
+                            @Html.DisplayNameFor(model => model.Comments[0].Content)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Comment[0].CreateDate)
+                            @Html.DisplayNameFor(model => model.Comments[0].CreateDate)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Comment[0].Post)
+                            @Html.DisplayNameFor(model => model.Comments[0].Post)
                         </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Comment)
+                    @foreach (var item in Model.Comments)
                     {
                         <tr>
                             <td>
@@ -105,7 +91,12 @@
                     }
                 </tbody>
             </table>
-            <li><a asp-page="/CommentPost/Create">Comment</a></li>
+            <h3>Add a comment</h3>
+            <form method="post" asp-route-postId="@Model.Post?.PostId">
+                <textarea asp-for="CommentIndex.Content"></textarea>
+                <span asp-validation-for="CommentIndex.Content"></span>
+                <button type="submit">Submit</button>
+            </form>
             <div class="text-center mt-3">
                 <a asp-page="./Edit" asp-route-id="@Model.Post?.PostId" class="btn btn-primary">Edit</a>
                 <a asp-page="./Index" class="btn btn-outline-primary">Back to List</a>
