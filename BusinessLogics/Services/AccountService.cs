@@ -17,6 +17,8 @@ namespace BusinessLogics.Services
         public void UpdateAccount(Account account);
         public void DeleteAccount(int id);
         public List<Account> GetAlllAccountAdmin();
+
+        public Account GetAccountByUserName(string username);
     }
     public class AccountService : IAccountService
     {
@@ -37,5 +39,7 @@ namespace BusinessLogics.Services
         public void UpdateAccount(Account account) => _accountRepository.UpdateAccount(account);
         public void DeleteAccount(int id) => _accountRepository.DeleteAccount(id);
         public List<Account> GetAlllAccountAdmin() => _accountRepository.GetAlllAccountAdmin();
+
+        public Account GetAccountByUserName(string username) => _accountRepository.GetAccountByUserName(username);
     }
 }

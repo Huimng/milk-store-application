@@ -1,70 +1,41 @@
 ﻿@page
 @model MilkStore.Pages.CommentPost.IndexModel
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comments - Baby Store</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/comments.css">
-</head>
-<body>
-    <header class="header">
-        <div class="container">
-            <h1>Baby Store</h1>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="/Index">Home</a></li>
-                    <li><a href="/Products">Products</a></li>
-                    <li><a href="/About">About Us</a></li>
-                    <li><a href="/Contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main class="container mt-5">
-        <h2 class="text-center mb-4">Comments</h2>
-
-        <p class="text-center">
-            <a asp-page="Create" class="btn btn-primary">Create New Comment</a>
-        </p>
-
-        <div class="comments-section">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.Comment[0].Content)</th>
-                        <th>@Html.DisplayNameFor(model => model.Comment[0].CreateDate)</th>
-                        <th>@Html.DisplayNameFor(model => model.Comment[0].Post.Title)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Comment)
-                    {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Content)</td>
-                            <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Post.Title)</td>
-                            <td>
-                                <a asp-page="./Edit" asp-route-id="@item.CommentId" class="btn btn-warning btn-sm">Edit</a>
-                                <a asp-page="./Details" asp-route-id="@item.CommentId" class="btn btn-info btn-sm">Details</a>
-                                <a asp-page="./Delete" asp-route-id="@item.CommentId" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Baby Store. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment[0].Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment[0].CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment[0].Post)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Comment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Post.Title)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.CommentId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.CommentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

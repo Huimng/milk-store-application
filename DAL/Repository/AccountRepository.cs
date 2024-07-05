@@ -16,6 +16,8 @@ namespace DAL.Repository
         public void DeleteAccount(int id);
         public List<Account> GetAlllAccountAdmin();
 
+        public Account GetAccountByUserName(String username);
+
     }
     public class AccountRepository : IAccountRepository
     {
@@ -149,5 +151,21 @@ namespace DAL.Repository
                 throw new Exception(ex.Message);
             }
             }
+
+        public Account GetAccountByUserName(string username)
+        {
+            try
+            {
+                using (var context = new BSADBContext())
+                {
+                    var account = context.Set<Account>().FirstOrDefault(x => x.Username == username);
+                    return account;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

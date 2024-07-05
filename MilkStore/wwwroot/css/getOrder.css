@@ -1,68 +1,13 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
+﻿.container {
+    color: black;
 }
 
-body {
-    background-color: #fdfdfd;
-    color: #333;
-}
-
-.header {
-    background-color: #f4c1c1;
-    padding: 20px 0;
-    text-align: center;
-}
-
-    .header h1 {
-        color: #ffffff;
-    }
-
-.nav-links {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0;
-    display: flex;
-    justify-content: center;
-}
-
-    .nav-links li {
-        margin: 0 15px;
-    }
-
-    .nav-links a {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-.container {
-    padding: 60px 20px;
-}
-
-.intro-section {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-    .intro-section p {
-        font-size: 1.5em;
-        color: #6CA6CD;
-    }
-
-.product-header, .product-order {
-    margin-bottom: 20px;
-    font-size: 1.2em;
-    color: #6CA6CD;
-}
-
-.form-label {
-    font-weight: bold;
-    color: #333;
+.confirmation-container {
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
 }
 
 .product-info {
@@ -71,48 +16,39 @@ body {
 }
 
 .product-image {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
     margin-right: 10px;
-    border-radius: 5px;
 }
 
-.order-divider {
-    border: 1px solid #f4c1c1;
-    margin: 40px 0;
+.product-name {
+    color: black;
+    margin-right: 10px;
 }
 
-.btn-primary {
-    background-color: #6CA6CD;
+table {
+    width: 100%;
+    border-radius: 10px;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: #ffffff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0 10px;
+    border-collapse: separate;
+    border: 1px solid black;
+    border-spacing: 0;
+    /*background-color: $shopapp-background-color;*/
 }
 
-    .btn-primary:hover {
-        background-color: #5c92b1;
-    }
-
-.btn-danger {
-    background-color: #d9534f;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: #ffffff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0 10px;
+th,
+td {
+    padding: 10px;
+    text-align: center;
 }
 
-    .btn-danger:hover {
-        background-color: #c9302c;
-    }
+.btn-gradient {
+    background: linear-gradient(to right, rgb(225, 64, 180), rgb(127, 68, 255));
+    color: black;
+    border-radius: 30px;
+    width: 200px;
+}
 
 .modal {
     display: none;
@@ -123,37 +59,29 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 10% auto;
+    background-color: #fefefe;
+    margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    position: relative;
 }
 
-    .modal-content h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #6CA6CD;
-    }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-    .modal-content .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
     }
-
-        .modal-content .close:hover,
-        .modal-content .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }

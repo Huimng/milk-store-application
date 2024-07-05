@@ -3,7 +3,10 @@ using DAL;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using MilkStore.Hubs;
 using System;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/User/Login";
-         options.AccessDeniedPath = "/User/Login";
+        options.AccessDeniedPath = "/User/Login";
     }
     );
 // builder.Services.AddDbContext<BSADBContext>(options =>
@@ -49,4 +53,5 @@ app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
 app.MapGet("/", () => Results.Redirect("/Home/Product"));
+app.MapHub<ChatHub>("/chatHub");
 await app.RunAsync();
