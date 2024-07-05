@@ -27,6 +27,8 @@ namespace MilkStore.Pages.PaymentOrder
 
         private readonly IOrderDetailService _orderDetailService;
 
+        private readonly IProductService _productService;
+
         public IndexModel(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             PaypalClientId = configuration["PaypalSettings:ClientId"]!;
@@ -35,6 +37,7 @@ namespace MilkStore.Pages.PaymentOrder
             _orderContactService = serviceProvider.GetRequiredService<IOrderContactService>();
             _orderService = serviceProvider.GetRequiredService<IOrderService>();
             _orderDetailService = serviceProvider.GetRequiredService<IOrderDetailService>();
+            _productService = serviceProvider.GetRequiredService<IProductService>();
         }
         public void OnGet()
         {
@@ -145,6 +148,7 @@ namespace MilkStore.Pages.PaymentOrder
                             orderDetail.UpdatedDate = DateTime.UtcNow;
                             orderDetail.ProductId = item.ProductId;
                             _orderDetailService.CreateOrderDetail(orderDetail);
+                            _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
                         }
 
                        
