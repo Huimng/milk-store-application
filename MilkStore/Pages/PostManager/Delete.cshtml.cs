@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.PostManager
 {
     public class DeleteModel : PageModel
     {
         private PostService postService;
-
-        public DeleteModel()
+        private readonly IHubContext<ChatHub> _hub;
+        public DeleteModel(IHubContext<ChatHub> hub)
         {
             postService = new PostService();
+            _hub = hub;
         }
 
         [BindProperty]
@@ -55,7 +58,7 @@ namespace MilkStore.Pages.PostManager
             {
                 postService.DeletePost(id);
             }
-
+            await _hub.Clients.All.SendAsync("Loading");
             return RedirectToPage("./Index");
         }
     }

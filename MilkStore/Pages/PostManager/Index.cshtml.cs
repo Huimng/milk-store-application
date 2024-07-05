@@ -10,6 +10,8 @@ using DAL;
 using BusinessLogics.Services;
 using DAL.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.PostManager
 {
@@ -18,12 +20,13 @@ namespace MilkStore.Pages.PostManager
         private readonly PostService postService;
         private readonly IProductService _productService;
         private readonly IAccountService _accountService;
-
-        public IndexModel(IServiceProvider serviceProvider)
+        private readonly IHubContext<ChatHub> _hub;
+        public IndexModel(IServiceProvider serviceProvider, IHubContext<ChatHub> hub)
         {
             postService = new PostService();
             _productService = serviceProvider.GetRequiredService<IProductService>();
             _accountService = serviceProvider.GetRequiredService<IAccountService>();
+            _hub = hub;
         }
 
         public List<Post> ListPost { get;set; } = default;
@@ -32,6 +35,7 @@ namespace MilkStore.Pages.PostManager
         {
             if (postService != null)
             {
+                await _hub.Clients.All.SendAsync("Loading");
                 ListPost = postService.GetPosts();
                 foreach (Post post in ListPost)
                 {
@@ -40,6 +44,7 @@ namespace MilkStore.Pages.PostManager
                     
                 }
             }
+            await _hub.Clients.All.SendAsync("Loading");
         }
     }
 }

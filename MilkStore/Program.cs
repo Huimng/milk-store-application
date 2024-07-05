@@ -53,5 +53,5 @@ app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
 app.MapGet("/", () => Results.Redirect("/Home/Product"));
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub>("/ChatHub");
 await app.RunAsync();

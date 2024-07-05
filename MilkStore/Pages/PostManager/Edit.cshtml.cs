@@ -10,6 +10,8 @@ using BusinessObjects;
 using DAL;
 using BusinessLogics.Services;
 using DAL.Repository;
+using Microsoft.AspNetCore.SignalR;
+using MilkStore.Hubs;
 
 namespace MilkStore.Pages.PostManager
 {
@@ -18,12 +20,13 @@ namespace MilkStore.Pages.PostManager
         private PostService postService;
         private IProductService _productService;
         private IAccountService _accountService;
-
-        public EditModel(IServiceProvider serviceProvider)
+        private readonly IHubContext<ChatHub> _hub;
+        public EditModel(IServiceProvider serviceProvider, IHubContext<ChatHub> hub)
         {
             postService = new PostService();
             _productService = serviceProvider.GetRequiredService<IProductService>();
             _accountService = serviceProvider.GetRequiredService<IAccountService>();
+            _hub = hub;
         }
 
         [BindProperty]
@@ -104,7 +107,7 @@ namespace MilkStore.Pages.PostManager
                     throw;
                 }
             }
-
+            await _hub.Clients.All.SendAsync("Loading");
             return RedirectToPage("./Index");
         }
         private bool PostExists(int id)
