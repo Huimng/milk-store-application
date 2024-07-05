@@ -23,7 +23,7 @@ namespace MilkStore.Pages.CommentPost
         {
             commentService = new CommentService();
             postService = new PostService();
-            _accountService = serviceProvider.GetRequiredService<IAccountService>()
+            _accountService = serviceProvider.GetRequiredService<IAccountService>();
         }
 
         public IActionResult OnGet()
@@ -44,7 +44,6 @@ namespace MilkStore.Pages.CommentPost
             }
             var username = Request.Cookies["Username"];
             int id = _accountService.GetAccountByUserName(username).AccountId;
-            Comment.
             Comment.CreateDate = DateTime.UtcNow;
             commentService.Comment(Comment);
             
