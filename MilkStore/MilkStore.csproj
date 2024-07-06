@@ -29,5 +29,8 @@
     </Content>
     <None Include="wwwroot\*" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\paymentOrder.css" />
+  </ItemGroup>
 
 </Project>

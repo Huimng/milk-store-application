@@ -1,94 +1,116 @@
 ﻿@page
-@using BusinessObjects;
+@using BusinessObjects
 @model MilkStore.Pages.ProductManager.EditModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/productManager.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Orders/GetOrdersStaff">Order</a></li>
+                    <li><a href="/ProductManager">Products</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Product.ProductId" />
-            <input type="hidden" asp-for="Product.UrlImage" />
-            <div class="form-group">
-                <label asp-for="Product.ProductName" class="control-label"></label>
-                <input asp-for="Product.ProductName" class="form-control" required />
-                <span asp-validation-for="Product.ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product.ProductCode" class="control-label"></label>
-                <input asp-for="Product.ProductCode" class="form-control" required />
-                <span asp-validation-for="Product.ProductCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product.Description" class="control-label"></label>
-                <input asp-for="Product.Description" class="form-control" required />
-                <span asp-validation-for="Product.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product.Brand" class="control-label"></label>
-                <input asp-for="Product.Brand" class="form-control" required />
-                <span asp-validation-for="Product.Brand" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <img src="/uploads/@Model.Product.UrlImage" alt="Product Image" class="img-fluid">
-            </div>
-            <div class="form-group row">
-                <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <div class="custom-file">
-                        <input asp-for="Photo" class="custom-file-input form-control">
-                        <label class="custom-file-label">Click here to change photo</label>
+    <main class="container mt-5">
+        <h2 class="text-center mb-4">Edit Product</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Product.ProductId" />
+                    <input type="hidden" asp-for="Product.UrlImage" />
+                    <div class="form-group">
+                        <label asp-for="Product.ProductName" class="control-label"></label>
+                        <input asp-for="Product.ProductName" class="form-control" required />
+                        <span asp-validation-for="Product.ProductName" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="Product.ProductCode" class="control-label"></label>
+                        <input asp-for="Product.ProductCode" class="form-control" required />
+                        <span asp-validation-for="Product.ProductCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Product.Description" class="control-label"></label>
+                        <input asp-for="Product.Description" class="form-control" required />
+                        <span asp-validation-for="Product.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Product.Brand" class="control-label"></label>
+                        <input asp-for="Product.Brand" class="form-control" required />
+                        <span asp-validation-for="Product.Brand" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <img src="/uploads/@Model.Product.UrlImage" alt="Product Image" class="img-fluid">
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <div class="custom-file">
+                                <input asp-for="Photo" class="custom-file-input form-control">
+                                <label class="custom-file-label">Click here to change photo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Product.Status" class="control-label"></label>
+                        <select asp-for="Product.Status" class="form-control" asp-items="Html.GetEnumSelectList<ProductStatus>()"></select>
+                        <span asp-validation-for="Product.Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Product.Discount" class="control-label"></label>
+                        <input asp-for="Product.Discount" class="form-control" type="number" step="0.01" required />
+                        <span asp-validation-for="Product.Discount" class="text-danger"></span>
+                    </div>
+
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Product.Status" class="control-label"></label>
-                <select asp-for="Product.Status" class="form-control" asp-items="Html.GetEnumSelectList<ProductStatus>()"></select>
-                <span asp-validation-for="Product.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product.Discount" class="control-label"></label>
-                <input asp-for="Product.Discount" class="form-control" type="number" step="0.01" required />
-                <span asp-validation-for="Product.Discount" class="text-danger"></span>
-            </div>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $(document).ready(function () {
-            $('.custom-file-input').on("change", function () {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).next('.custom-file-label').html(fileName);
-
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
             });
-        });
-    </script>
-
-}
-
-<style>
-    img {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
+        </script>
     }
-</style>
+</body>
+</html>

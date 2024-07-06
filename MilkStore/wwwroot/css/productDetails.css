@@ -169,3 +169,48 @@ body {
         display: block;
     }
 
+/* Star rating */
+.star-rating {
+    display: flex;
+    align-items: center;
+}
+
+.fa-star {
+    font-size: 20px;
+    margin-right: 5px;
+    color: #ccc;
+}
+
+    .fa-star.checked {
+        color: #ffbb00; 
+    }
+
+
+.card-title {
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.text-muted {
+    font-size: 0.875rem;
+}
+
+.card-body {
+    position: relative;
+}
+
+.card-text {
+    margin-top: 1rem;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
