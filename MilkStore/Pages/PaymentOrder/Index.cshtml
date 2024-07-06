@@ -4,84 +4,118 @@
     ViewData["NoContainer"] = true;
 }
 <script src="https://www.paypal.com/sdk/js?client-id=@(Model.PaypalClientId)&currency=USD"></script>
-<div class="p-5" style="background-color: #08618d">
-    <div class="mx-auto p-3 bg-light rounded border" style="width: 420px;">
-        <h2 class="text-center mb-5">Complete your order</h2>
-        <div class="row mb-3">
-            <div class="col-5">Name</div>
-            <div class="col-7">@Model.OrderContact.CustomerName</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Order - Baby Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/paymentorder.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/Products">Products</a></li>
+                    <li><a asp-page="/About">About Us</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-        <div class="row mb-3">
-            <div class="col-5">Total Amount</div>
-            <div class="col-7">@Model.Order.GrandTotal</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-5">Phone</div>
-            <div class="col-7">@Model.OrderContact.Phone</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-5">Address</div>
-            <div class="col-7">@Model.Order.Address</div>
-        </div>
-        <br />
-        <div id="notification-container" class="text-start mt-3"></div>
-        <div id="paypal-button-container" class="text-start mt-3"></div>
-    </div>
-</div>
+    </header>
 
+    <main>
+        <section class="payment-order">
+            <div class="container">
+                <div class="p-5" style="background-color: #08618d">
+                    <div class="mx-auto p-3 bg-light rounded border" style="width: 420px;">
+                        <h2 class="text-center mb-5">Complete your order</h2>
+                        <div class="row mb-3">
+                            <div class="col-5">Name</div>
+                            <div class="col-7">@Model.OrderContact.CustomerName</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5">Total Amount</div>
+                            <div class="col-7">@Model.Order.GrandTotal</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5">Phone</div>
+                            <div class="col-7">@Model.OrderContact.Phone</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5">Address</div>
+                            <div class="col-7">@Model.Order.Address</div>
+                        </div>
+                        <br />
+                        <div id="notification-container" class="text-start mt-3"></div>
+                        <div id="paypal-button-container" class="text-start mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<script>
-    let paypal_buttons = paypal.Buttons({
-        createOrder() {
-            return fetch("/PaymentOrder?handler=CreateOrder", {
-                method: "POST"
-            }
-            ).then((response) => response.json())
-                .then((order) => order.id)
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
 
-        },
-        onApprove(data) {
-            paypal_buttons.close();
-            // Capture the funds from the transaction.
-            return fetch("/PaymentOrder?handler=CompleteOrder", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    orderID: data.orderID
-                })
-            }).then((response) => response.json())
-                .then((details) => {
-                    if (details == "success") {
-                        document.getElementById("notification-container").innerHTML =
-                            '<div class="alert alert-success" role="alert">The order is created successfully!</div>';
-                    } else {
-                        document.getElementById("notification-container").innerHTML =
-                            '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
-                    }
+    <script>
+        let paypal_buttons = paypal.Buttons({
+            createOrder() {
+                return fetch("/PaymentOrder?handler=CreateOrder", {
+                    method: "POST"
+                }
+                ).then((response) => response.json())
+                    .then((order) => order.id)
+            },
+            onApprove(data) {
+                paypal_buttons.close();
+                // Capture the funds from the transaction.
+                return fetch("/PaymentOrder?handler=CompleteOrder", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID
+                    })
+                }).then((response) => response.json())
+                    .then((details) => {
+                        if (details == "success") {
+                            document.getElementById("notification-container").innerHTML =
+                                '<div class="alert alert-success" role="alert">The order is created successfully!</div>';
+                        } else {
+                            document.getElementById("notification-container").innerHTML =
+                                '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
+                        }
+                    });
+            },
+            onCancel(data) {
+                document.getElementById("notification-container").innerHTML =
+                    '<div class="alert alert-danger" role="alert">Order Cancelled!</div>';
+
+                return fetch("/PaymentOrder?handler=CancelOrder", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID
+                    })
                 });
-        },
-        onCancel(data) {
-            document.getElementById("notification-container").innerHTML =
-                '<div class="alert alert-danger" role="alert">Order Cancel!</div>';
-
-            return fetch("/PaymentOrder?handler=CancelOrder", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    orderID: data.orderID
-                })
-            });
-
-
-        },
-        onError(err) {
-            document.getElementById("notification-container").innerHTML =
-                '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
-        }
-    });
-    paypal_buttons.render('#paypal-button-container');
-</script>
+            },
+            onError(err) {
+                document.getElementById("notification-container").innerHTML =
+                    '<div class="alert alert-danger" role="alert">Failed to create the order!</div>';
+            }
+        });
+        paypal_buttons.render('#paypal-button-container');
+    </script>
+</body>
+</html>

@@ -1,42 +1,89 @@
 ﻿@page
 @model MilkStore.Pages.ProductLineManager.IndexModel
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductLine[0].ExpireDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductLine[0].AgeGroup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductLine[0].Product)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.ProductLine) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpireDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AgeGroup)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Brand)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ProductLineId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProductLineId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProductLineId">Delete</a>
-            </td>
-        </tr>
+@{
+    ViewData["Title"] = "Product Lines";
 }
-    </tbody>
-</table>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/productManager.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Orders/GetOrdersStaff">Order</a></li>
+                    <li><a href="/ProductManager">Products</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <h2 class="text-center mb-4">Product Lines</h2>
+
+        <p>
+            <a class="btn btn-primary" asp-page="Create">Create New</a>
+        </p>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductLine[0].ExpireDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductLine[0].AgeGroup)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductLine[0].Product)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProductLine)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpireDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AgeGroup)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Product.Brand)
+                        </td>
+                        <td>
+                            <a class="btn btn-secondary btn-sm" asp-page="./Edit" asp-route-id="@item.ProductLineId">Edit</a>
+                            <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.ProductLineId">Details</a>
+                            <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-id="@item.ProductLineId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

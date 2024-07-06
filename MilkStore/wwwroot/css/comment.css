@@ -1,0 +1,82 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #fdfdfd;
+    color: #333;
+}
+
+.header {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+    .header h1 {
+        color: #ffffff;
+    }
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+    .nav-links li {
+        margin: 0 15px;
+    }
+
+    .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comment-list {
+    margin-top: 20px;
+}
+
+.comment-item {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+}
+
+    .comment-item h5 {
+        margin-bottom: 10px;
+    }
+
+    .comment-item .comment-date {
+        color: #aaa;
+        font-size: 0.9em;
+    }
+
+.footer {
+    background-color: #f4c1c1;
+    padding: 20px 0;
+    text-align: center;
+}
+
+    .footer p {
+        color: #ffffff;
+    }

@@ -25,7 +25,7 @@
                     <li><a asp-page="/Products">Products</a></li>
                     <li><a asp-page="/About">About Us</a></li>
                     <li><a asp-page="/Contact">Contact</a></li>
-                    <li><a asp-page="/CommentPost/Index">Contact</a></li>
+                    <li><a asp-page="/CommentPost/Index">Comments</a></li>
                 </ul>
             </nav>
         </div>
@@ -35,11 +35,11 @@
         <section class="product-detail">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 product-image">
                         <img src="/uploads/@Product.UrlImage" alt="Product Image" class="img-fluid">
                     </div>
-                    <div class="col-md-6">
-                        <h2>@Product.ProductName</h2>
+                    <div class="col-md-6 product-info">
+                        <h1>@Product.ProductName</h1>
                         <p class="price">@Product.Discount.ToString("C")</p>
                         <p>@Product.Description</p>
                         <p>Brand: @Product.Brand</p>
@@ -63,45 +63,43 @@
                                 </div>
                             </form>
                         }
-                       
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- User Reviews Section -->
-        @if(Model.ListProductFeedback.Any()){
-        <section class="product-reviews">
-            <div class="container">
-                <h3>User Reviews</h3>
-                <div class="reviews-list">
-                    @foreach (var review in Model.ListProductFeedback)
-                    {
-                        <!-- First comment -->
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">@review.Account.Name</h5>
-                                    <h6 class="text-muted mb-0">@review.CreateDate.ToString("dd-MM-yyyy")</h6>
+        @if (Model.ListProductFeedback.Any())
+        {
+            <section class="product-reviews">
+                <div class="container">
+                    <h3>User Reviews</h3>
+                    <div class="reviews-list">
+                        @foreach (var review in Model.ListProductFeedback)
+                        {
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">@review.Account.Name</h5>
+                                        <h6 class="text-muted mb-0">@review.CreateDate.ToString("dd-MM-yyyy")</h6>
+                                    </div>
+                                    <h3 class="star-rating">
+                                        @for (var i = 0; i < review.Point; i++)
+                                        {
+                                            <span class="fa fa-star checked"></span>
+                                        }
+                                        @for (var i = review.Point; i < 5; i++)
+                                        {
+                                            <span class="fa fa-star"></span>
+                                        }
+                                    </h3>
+                                    <p class="card-text">@review.Comment</p>
                                 </div>
-                                <h3 class="star-rating">
-                                    @for (var i = 0; i < review.Point; i++)
-                                    {
-                                        <span class="fa fa-star checked"></span>
-                                    }
-                                    @for (var i = review.Point; i < 5; i++)
-                                    {
-                                        <span class="fa fa-star"></span>
-                                    }
-                                </h3>
-                                <p class="card-text">@review.Comment</p>
-                                
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
         }
     </main>
 
@@ -110,53 +108,6 @@
             <p>&copy; 2024 Baby Store. All rights reserved.</p>
         </div>
     </footer>
-    <style>
-        /* Star rating */
-        .star-rating {
-            display: flex;
-            align-items: center;
-        }
-
-        .fa-star {
-            font-size: 20px;
-            margin-right: 5px;
-            color: #ccc; /* Default color for stars */
-        }
-
-            .fa-star.checked {
-                color: #ffbb00; /* Color for checked stars */
-            }
-
-        /* Additional styles for the review card */
-        .card-title {
-            margin-bottom: 0;
-            font-weight: 600;
-        }
-
-        .text-muted {
-            font-size: 0.875rem;
-        }
-
-        .card-body {
-            position: relative;
-        }
-
-        .card-text {
-            margin-top: 1rem;
-        }
-
-        .d-flex {
-            display: flex;
-        }
-
-        .justify-content-between {
-            justify-content: space-between;
-        }
-
-        .align-items-center {
-            align-items: center;
-        }
-    </style>
 
     <script>
         function changeQuantity(amount) {
