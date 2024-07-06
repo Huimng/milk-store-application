@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,9 @@ namespace DAL.Repository
         public void DeleteAccount(int id);
         public List<Account> GetAlllAccountAdmin();
 
+        public List<Account> GetAlllStaff();
+
+        public List<Account> GetAllMember();
         public Account GetAccountByUserName(String username);
 
     }
@@ -166,6 +170,18 @@ namespace DAL.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public List<Account> GetAlllStaff()
+        {
+            var context = new BSADBContext();
+            return context.Accounts.Where(x => x.Role == AccountRoles.Staff).ToList();
+        }
+
+        public List<Account> GetAllMember()
+        {
+            var context = new BSADBContext();
+            return context.Accounts.Where(x => x.Role == AccountRoles.Member).ToList();
         }
     }
 }

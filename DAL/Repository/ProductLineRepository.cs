@@ -44,8 +44,6 @@ namespace DAL.Repository
             {
                 dbContext.Entry(trackedTag.Entity).State = EntityState.Detached;
             }
-
-            // Cập nhật thực thể
             dbContext.ProductLines.Update(productLine);
             dbContext.SaveChanges();
         }

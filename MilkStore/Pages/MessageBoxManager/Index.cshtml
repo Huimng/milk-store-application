@@ -1,0 +1,49 @@
+﻿@page
+@model MilkStore.Pages.MessageBoxManager.IndexModel
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageGroup[0].GroupName)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.MessageGroup[0].Status)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.MessageGroup[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageGroup[0].Manager)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MessageGroup) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupName)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manager.Name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MessageGroupId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MessageGroupId">Details</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+<script src="~/js/site.js"></script>

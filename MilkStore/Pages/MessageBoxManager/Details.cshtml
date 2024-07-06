@@ -1,0 +1,82 @@
+﻿@page "{id:int}"
+@model MilkStore.Pages.MessageGroupManager.DetailsModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Store - Message Group Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/messages.css">
+</head>
+<body>
+    <main class="container">
+        <section class="message-group-section">
+            <h2>Message Group Details</h2>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MessageGroup.GroupName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MessageGroup.GroupName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MessageGroup.Customer.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MessageGroup.Customer.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MessageGroup.Manager.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MessageGroup.Manager.Name)
+                </dd>
+            </dl>
+            <div>
+                <h3>Messages</h3>
+                <ul>
+                    @foreach (var message in Model.Messages)
+                    {
+                        <li>@message.Content</li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <h3>Create New Message</h3>
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="form-group">
+                        <label asp-for="NewMessage.Content" class="control-label"></label>
+                        <input asp-for="NewMessage.Content" class="form-control" />
+                        <span asp-validation-for="NewMessage.Content" class="text-danger"></span>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-page="./Edit" asp-route-id="@Model.MessageGroup?.MessageGroupId" class="btn btn-primary">Edit</a>
+                <a asp-page="./Index" class="btn btn-outline-primary">Back to List</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+<script src="~/js/site.js"></script>
