@@ -15,6 +15,7 @@ namespace DAL.Repository
 
         public void CreateProductLine(ProductLine productLine)
         {
+            productLine.IsActived = true;
             dbContext.ProductLines.Add(productLine);
             dbContext.SaveChanges();
         }

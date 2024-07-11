@@ -10,6 +10,8 @@ using DAL;
 using BusinessLogics.Services;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MilkStore.Pages.ProductManager
 {
@@ -47,8 +49,41 @@ namespace MilkStore.Pages.ProductManager
             }
             else 
             {
-                ProductLineSummaries = _productService.GetAllExpireDate(id);
-                Product = product;
+               List<ProductLineSummary> ProductLineSurima = _productService.GetAllExpireDate(id);
+                
+                foreach (var summary in ProductLineSurima)
+                {
+                    if(summary.IsDeleted == false)
+                    {
+                        summary.Quantity = 0;
+                    }               
+                   
+                }
+                ProductLineSummary[] productLinesArray = ProductLineSurima.ToArray();
+
+                for(int i = 0; i < productLinesArray.Length -1; i++)
+                {
+                    for(int j = i+1; j < productLinesArray.Length; j++)
+                    {
+                        if (productLinesArray[i].AgeGroup.Equals(productLinesArray[j].AgeGroup) && productLinesArray[i].ExpireDate.Equals(productLinesArray[j].ExpireDate))
+                        {
+                            if (!productLinesArray[i].IsDeleted.Equals(productLinesArray[j].IsDeleted))
+                            {
+                                if (productLinesArray[i].Quantity == 0 || productLinesArray[j].Quantity == 0)
+                                {
+                                    List<ProductLineSummary> sdafsa = productLinesArray.ToList();
+                                    sdafsa.RemoveAt(i);
+                                    productLinesArray = sdafsa.ToArray();
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ProductLineSummaries = productLinesArray.ToList();
+
+               Product = product;
             }
             return Page();
         }
@@ -68,7 +103,7 @@ namespace MilkStore.Pages.ProductManager
             {
                 ProductLine productLine = new ProductLine();
                 productLine.ProductId = productId;
-                productLine.ExpireDate = DateTime.SpecifyKind(ProductLine.ExpireDate, DateTimeKind.Utc);
+                productLine.ExpireDate = DateTime.SpecifyKind(ProductLine.ExpireDate, DateTimeKind.Utc).ToUniversalTime();
                 productLine.AgeGroup = ProductLine.AgeGroup;
                 productLineService.AddProductLIne(productLine);
 
@@ -80,7 +115,39 @@ namespace MilkStore.Pages.ProductManager
             }
             else
             {
-                ProductLineSummaries = _productService.GetAllExpireDate(productId);
+                List<ProductLineSummary> ProductLineSurima = _productService.GetAllExpireDate(productId);
+
+                foreach (var summary in ProductLineSurima)
+                {
+                    if (summary.IsDeleted == false)
+                    {
+                        summary.Quantity = 0;
+                    }
+
+                }
+                ProductLineSummary[] productLinesArray = ProductLineSurima.ToArray();
+
+                for (int i = 0; i < productLinesArray.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < productLinesArray.Length; j++)
+                    {
+                        if (productLinesArray[i].AgeGroup.Equals(productLinesArray[j].AgeGroup) && productLinesArray[i].ExpireDate.Equals(productLinesArray[j].ExpireDate))
+                        {
+                            if (!productLinesArray[i].IsDeleted.Equals(productLinesArray[j].IsDeleted))
+                            {
+                                if (productLinesArray[i].Quantity == 0 || productLinesArray[j].Quantity == 0)
+                                {
+                                    List<ProductLineSummary> sdafsa = productLinesArray.ToList();
+                                    sdafsa.RemoveAt(i);
+                                    productLinesArray = sdafsa.ToArray();
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ProductLineSummaries = productLinesArray.ToList();
                 Product = product;
             }
             return Page();
