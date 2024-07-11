@@ -71,7 +71,8 @@ namespace DAL.Repository
                 {
                 var result = context.Set<ProductLine>()
                .Where(pl => pl.ProductId == idProduct)
-               .GroupBy(pl => new { pl.ExpireDate, pl.AgeGroup, pl.IsActived })
+               .OrderBy(pl=>pl.IsActived)
+               .GroupBy(pl => new { pl.ExpireDate, pl.AgeGroup, pl.IsActived })              
                .Select(g => new ProductLineSummary
                {
                    Quantity = g.Count(),

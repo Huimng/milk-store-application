@@ -60,8 +60,9 @@ namespace MilkStore.Pages.ProductManager
                    
                 }
                 ProductLineSummary[] productLinesArray = ProductLineSurima.ToArray();
+                
 
-                for(int i = 0; i < productLinesArray.Length -1; i++)
+                for (int i = 0; i < productLinesArray.Length -1; i++)
                 {
                     for(int j = i+1; j < productLinesArray.Length; j++)
                     {
@@ -71,9 +72,22 @@ namespace MilkStore.Pages.ProductManager
                             {
                                 if (productLinesArray[i].Quantity == 0 || productLinesArray[j].Quantity == 0)
                                 {
-                                    List<ProductLineSummary> sdafsa = productLinesArray.ToList();
-                                    sdafsa.RemoveAt(i);
-                                    productLinesArray = sdafsa.ToArray();
+                                    if(productLinesArray[j].IsDeleted == false)
+                                    {
+                                        List<ProductLineSummary> sdafsa = productLinesArray.ToList();
+                                        sdafsa.RemoveAt(j);
+                                        productLinesArray = sdafsa.ToArray();
+                                    }
+                                    else
+                                    {
+                                        List<ProductLineSummary> sdafsa1 = productLinesArray.ToList();
+                                        sdafsa1.RemoveAt(i);
+                                        productLinesArray = sdafsa1.ToArray();
+                                    }
+
+                                   
+
+
 
                                 }
                             }
@@ -137,9 +151,18 @@ namespace MilkStore.Pages.ProductManager
                             {
                                 if (productLinesArray[i].Quantity == 0 || productLinesArray[j].Quantity == 0)
                                 {
-                                    List<ProductLineSummary> sdafsa = productLinesArray.ToList();
-                                    sdafsa.RemoveAt(i);
-                                    productLinesArray = sdafsa.ToArray();
+                                    if (productLinesArray[j].IsDeleted == false)
+                                    {
+                                        List<ProductLineSummary> sdafsa = productLinesArray.ToList();
+                                        sdafsa.RemoveAt(j);
+                                        productLinesArray = sdafsa.ToArray();
+                                    }
+                                    else
+                                    {
+                                        List<ProductLineSummary> sdafsa1 = productLinesArray.ToList();
+                                        sdafsa1.RemoveAt(i);
+                                        productLinesArray = sdafsa1.ToArray();
+                                    }
 
                                 }
                             }
