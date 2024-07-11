@@ -71,12 +71,13 @@ namespace DAL.Repository
                 {
                 var result = context.Set<ProductLine>()
                .Where(pl => pl.ProductId == idProduct)
-               .GroupBy(pl => new { pl.ExpireDate, pl.AgeGroup })
+               .GroupBy(pl => new { pl.ExpireDate, pl.AgeGroup, pl.IsActived })
                .Select(g => new ProductLineSummary
                {
                    Quantity = g.Count(),
                    ExpireDate = g.Key.ExpireDate,
-                   AgeGroup = g.Key.AgeGroup
+                   AgeGroup = g.Key.AgeGroup,
+                   IsDeleted = g.Key.IsActived
                })
                .ToList();
 
@@ -208,7 +209,7 @@ namespace DAL.Repository
                         }
 
                         var productLinesToRemove = context.Set<ProductLine>()
-                            .Where(pl => pl.ProductId == idProduct)
+                            .Where(pl => pl.ProductId == idProduct && pl.IsActived == true )
                             .OrderBy(pl => pl.ExpireDate)
                             .Take(quantity)
                             .ToList();
@@ -218,7 +219,10 @@ namespace DAL.Repository
                             throw new InvalidOperationException("Insufficient product lines available.");
                         }
 
-                        context.ProductLines.RemoveRange(productLinesToRemove);
+                        foreach(var line in productLinesToRemove)
+                        {
+                            line.IsActived = false;
+                        }
 
                         context.SaveChanges();
                         transaction.Commit();

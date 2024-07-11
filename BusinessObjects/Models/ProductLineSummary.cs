@@ -11,5 +11,6 @@ namespace BusinessObjects.Models
         public int Quantity { get; set; }
         public DateTime ExpireDate { get; set; }
         public string? AgeGroup { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

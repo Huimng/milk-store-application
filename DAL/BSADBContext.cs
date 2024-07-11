@@ -463,6 +463,8 @@ public partial class BSADBContext
             entity.Property(e => e.AgeGroup)
                 .IsRequired()
                 .HasMaxLength(125);
+            entity.Property(e => e.IsActived
+            ) .IsRequired();
 
             // Define relationship
             entity.HasOne(e => e.Product)
