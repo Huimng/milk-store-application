@@ -100,7 +100,7 @@
                             {
                                 <tr>
                                     <td>@item.Quantity</td>
-                                    <td>@item.ExpireDate.ToLocalTime()</td>
+                                    <td>@item.ExpireDate.ToUniversalTime()</td>
                                     <td>@item.AgeGroup</td>
                                 </tr>
                             }
@@ -141,7 +141,7 @@
             </dl>
         </div>
         <div class="text-center mt-3">
-            <a class="btn btn-secondary" asp-page="./Edit" asp-route-id="@Model.Product?.ProductId">Edit</a> |
+           @*  <a class="btn btn-secondary" asp-page="./Edit" asp-route-id="@Model.Product?.ProductId">Edit</a> | *@
             <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
         </div>
     </main>

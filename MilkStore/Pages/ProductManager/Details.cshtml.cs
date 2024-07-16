@@ -102,14 +102,82 @@ namespace MilkStore.Pages.ProductManager
             return Page();
         }
 
+        public void RefreshPage(int id)
+        {
+            var product = _productService.GetProduct(id);
+            List<ProductLineSummary> ProductLineSurima = _productService.GetAllExpireDate(id);
+
+            foreach (var summary in ProductLineSurima)
+            {
+                if (summary.IsDeleted == false)
+                {
+                    summary.Quantity = 0;
+                }
+
+            }
+            ProductLineSummary[] productLinesArray = ProductLineSurima.ToArray();
+
+
+            for (int i = 0; i < productLinesArray.Length - 1; i++)
+            {
+                for (int j = i + 1; j < productLinesArray.Length; j++)
+                {
+                    if (productLinesArray[i].AgeGroup.Equals(productLinesArray[j].AgeGroup) && productLinesArray[i].ExpireDate.Equals(productLinesArray[j].ExpireDate))
+                    {
+                        if (!productLinesArray[i].IsDeleted.Equals(productLinesArray[j].IsDeleted))
+                        {
+                            if (productLinesArray[i].Quantity == 0 || productLinesArray[j].Quantity == 0)
+                            {
+                                if (productLinesArray[j].IsDeleted == false)
+                                {
+                                    List<ProductLineSummary> sdafsa = productLinesArray.ToList();
+                                    sdafsa.RemoveAt(j);
+                                    productLinesArray = sdafsa.ToArray();
+                                }
+                                else
+                                {
+                                    List<ProductLineSummary> sdafsa1 = productLinesArray.ToList();
+                                    sdafsa1.RemoveAt(i);
+                                    productLinesArray = sdafsa1.ToArray();
+                                }
+
+
+
+
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            ProductLineSummaries = productLinesArray.ToList();
+
+            Product = product;
+        }
+
         public async Task<IActionResult> OnPostAsync(int productId) {
             if (ProductLine == null)
             {
+                RefreshPage(productId);
+                return Page();
+            }
+            if(ProductLine.ExpireDate <= DateTime.UtcNow)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Expire Date (Date must large today).");
+                RefreshPage(productId);
+                return Page();
+            }
+            if (string.IsNullOrEmpty(ProductLine.AgeGroup))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Age Group");
+                RefreshPage(productId);
                 return Page();
             }
             if (Quantity < 0)
             {
                 ModelState.AddModelError(string.Empty, "Invalid Quantity.");
+                RefreshPage(productId);
                 return Page();
             }
             _productService.UpdateQuantityFromProductLine(productId, Quantity);
