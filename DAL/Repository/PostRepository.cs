@@ -17,7 +17,7 @@ namespace DAL.Repository
             {
                 using (var context = new BSADBContext())
                 {
-                    return context.Set<Post>().ToList();
+                    return context.Set<Post>().Include(p => p.Product).ToList();
                 }
             }
             catch (Exception ex)
