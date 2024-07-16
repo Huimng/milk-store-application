@@ -38,6 +38,18 @@ namespace MilkStore.Pages.AccountManager
             {
                 return Page();
             }
+            var checkaccount = _accountService.GetAccounts().Where(x => x.Email == Account.Email).FirstOrDefault();
+            if (checkaccount != null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid email existed.");
+                return Page();
+            }
+            var checkaccount2 = _accountService.GetAccounts().Where(x => x.Username == Account.Username).FirstOrDefault();
+            if (checkaccount2 != null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid username existed.");
+                return Page();
+            }
             Account.Role = AccountRoles.Staff;
             Account.Status = true;
             Account.CreatedDate = DateTime.UtcNow;

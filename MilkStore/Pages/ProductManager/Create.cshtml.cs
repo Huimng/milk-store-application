@@ -42,13 +42,35 @@ namespace MilkStore.Pages.ProductManager
           {
                 return Page();
           }
-            if (Product.Discount < 0)
+
+          if (string.IsNullOrEmpty(Product.ProductName))
+          {
+                return Page();
+          }
+          if (string.IsNullOrEmpty(Product.ProductCode))
+           {
+                return Page();
+           }
+          if (string.IsNullOrEmpty(Product.Description))
+           {
+                return Page();
+           }
+           if (string.IsNullOrEmpty(Product.Brand))
             {
-                ModelState.AddModelError(string.Empty, "Invalid Price.");
+                return Page();
+            }
+            if (string.IsNullOrEmpty(Product.Discount.ToString()))
+            {
                 return Page();
             }
 
-            if (Photo != null)
+            if (Product.Discount < 0)
+          {
+                ModelState.AddModelError(string.Empty, "Invalid Price.");
+                return Page();
+          }
+
+          if (Photo != null)
             {
                 Product.UrlImage = ProcessUploadedFile();
             }

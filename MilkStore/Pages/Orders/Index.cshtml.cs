@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace MilkStore.Pages.Orders
 {
@@ -41,20 +42,90 @@ namespace MilkStore.Pages.Orders
 
         public void OnGet()
         {
+
+            GetCartInOrder();
+        }
+
+        public void GetCartInOrder()
+        {
             TotalPrice = 0;
             Cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
-            foreach (var item in Cart) {
+            foreach (var item in Cart)
+            {
                 TotalPrice += (item.Price * item.Quantity);
             }
             var accountNameClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
             AccountName = accountNameClaim.Value;
-
         }
 
         public void OnPost()
         {
             //if (ModelState.IsValid)
             //{
+           if( string.IsNullOrEmpty(OrderContact.CustomerName))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid customer name attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+           if(!Regex.IsMatch(OrderContact.CustomerName, @"^[\p{L}\s]+$"))
+            {
+                ModelState.AddModelError(string.Empty, "Name Customer is not number");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (string.IsNullOrEmpty(OrderContact.Phone))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid phone attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (!Regex.IsMatch(OrderContact.Phone, @"^\d+$"))
+            {
+                ModelState.AddModelError(string.Empty, "phone is number");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (!Regex.IsMatch(OrderContact.Phone, @"^\d{10,11}$"))
+            {
+                ModelState.AddModelError(string.Empty, "Phone number must be 10 or 11 digits long.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(OrderContact.City))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid city attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (string.IsNullOrEmpty(OrderContact.Province))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid province attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (string.IsNullOrEmpty(OrderContact.District))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid district attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
+            if (string.IsNullOrEmpty(OrderContact.HouseNumber))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid house number attempt.");
+                GetCartInOrder();
+                Page();
+                return;
+            }
 
             TotalPrice = 0;
             Cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
@@ -95,7 +166,7 @@ namespace MilkStore.Pages.Orders
             
 
             foreach (var item in Cart)
-                {
+            {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.OrderId = order.OrderId;
                     orderDetail.Quantity = item.Quantity;
@@ -105,7 +176,7 @@ namespace MilkStore.Pages.Orders
                     orderDetail.ProductId = item.ProductId;
                     _orderDetailService.CreateOrderDetail(orderDetail);
                     _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
-                }
+            }
 
 
                 HttpContext.Session.Remove("Cart");

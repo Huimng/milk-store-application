@@ -37,6 +37,22 @@ namespace MilkStore.Pages.Orders
 
         public IActionResult OnPostUpdateOrder()
         {
+            if (string.IsNullOrEmpty(CurrentOrder.OrderContact.CustomerName))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Name attempt.");
+                return RedirectToPage("/Orders/GetOrdersStaff");
+            }
+            if (string.IsNullOrEmpty(CurrentOrder.OrderContact.Phone))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Phone attempt.");
+                return RedirectToPage("/Orders/GetOrdersStaff");
+            }
+            if (string.IsNullOrEmpty(CurrentOrder.Address))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Address attempt.");
+                return RedirectToPage("/Orders/GetOrdersStaff");
+            }
+
             _orderService.UpdateOrder(CurrentOrder);
             return RedirectToPage("/Orders/GetOrdersStaff");
         }
