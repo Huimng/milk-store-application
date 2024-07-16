@@ -1,44 +1,67 @@
 ﻿@page
 @model MilkStore.Pages.MessageBoxManager.EditModel
 
-<h4>MessageGroup</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MessageGroup.MessageGroupId" />
-            <div class="form-group">
-                <label asp-for="MessageGroup.GroupName" class="control-label"></label>
-                <input asp-for="MessageGroup.GroupName" class="form-control" />
-                <span asp-validation-for="MessageGroup.GroupName" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
-                <label asp-for="MessageGroup.CustomerId" class="control-label"></label>
-                <select asp-for="MessageGroup.CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
-                <span asp-validation-for="MessageGroup.CustomerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MessageGroup.ManagerId" class="control-label"></label>
-                <select asp-for="MessageGroup.ManagerId" class="form-control" asp-items="ViewBag.ManagerId"></select>
-                <span asp-validation-for="MessageGroup.ManagerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MessageGroup.Status" class="control-label"></label>
-                <select asp-for="MessageGroup.Status" class="form-control"></select>
-                <span asp-validation-for="MessageGroup.Status" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Message Group - Baby Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/messagebox.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/Products">Products</a></li>
+                    <li><a asp-page="/Posts">Posts</a></li>
+                    <li><a asp-page="/About">About Us</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+    <main class="container mt-5">
+        <h2 class="text-center mb-4">Edit Message Group</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="MessageGroup.MessageGroupId" />
+                    <div class="form-group">
+                        <label asp-for="MessageGroup.GroupName" class="control-label"></label>
+                        <input asp-for="MessageGroup.GroupName" class="form-control" />
+                        <span asp-validation-for="MessageGroup.GroupName" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a asp-page="Index" class="btn btn-outline-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

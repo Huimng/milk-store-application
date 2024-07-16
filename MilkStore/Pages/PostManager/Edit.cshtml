@@ -1,50 +1,78 @@
 ﻿@page
 @model MilkStore.Pages.PostManager.EditModel
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post - Baby Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/postmanager.css">
+</head>
 <body>
-<h4>Post</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Post.PostId" />
-            <div class="form-group">
-                <label asp-for="Post.Title" class="control-label"></label>
-                <input asp-for="Post.Title" class="form-control" />
-                <span asp-validation-for="Post.Title" class="text-danger"></span>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Home">Home</a></li>
+                    <li><a href="/ProductManager">Products</a></li>
+                    <li><a href="/PostManager">Posts</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <h2 class="text-center mb-4">Edit Post</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Post.PostId" />
+                    <div class="form-group">
+                        <label for="Post_Title" class="control-label">Title</label>
+                        <input id="Post_Title" name="Post.Title" class="form-control" />
+                        <span asp-validation-for="Post.Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Post_Contents" class="control-label">Contents</label>
+                        <input id="Post_Contents" name="Post.Contents" class="form-control" />
+                        <span asp-validation-for="Post.Contents" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Post_CreateDate" class="control-label">Create Date</label>
+                        <input id="Post_CreateDate" name="Post.CreateDate" class="form-control" type="datetime" disabled />
+                        <span asp-validation-for="Post.CreateDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Post_CreateBy" class="control-label">Created By</label>
+                        <select id="Post_CreateBy" name="Post.CreateBy" class="form-control" asp-items="ViewBag.CreateBy" disabled></select>
+                        <span asp-validation-for="Post.CreateBy" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Post_Status" class="control-label">Status</label>
+                        <select id="Post_Status" name="Post.Status" class="form-control" asp-items="ViewBag.PostStatuses"></select>
+                        <span asp-validation-for="Post.Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Post_ProductId" class="control-label">Product</label>
+                        <select id="Post_ProductId" name="Post.ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                        <span asp-validation-for="Post.ProductId" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/PostManager" class="btn btn-secondary">Back to List</a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Post.Contents" class="control-label"></label>
-                <input asp-for="Post.Contents" class="form-control" />
-                <span asp-validation-for="Post.Contents" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Post.CreateDate" class="control-label"></label>
-                <input asp-for="Post.CreateDate" class="form-control" type="datetime" disabled/>
-                <span asp-validation-for="Post.CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Post.CreateBy" class="control-label"></label>
-                <select asp-for="Post.CreateBy" class="form-control" asp-items="ViewBag.CreateBy" disabled></select>
-                <span asp-validation-for="Post.CreateBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Post.Status" class="control-label"></label>
-                <select asp-for="Post.Status" class="form-control" asp-items="ViewBag.PostStatuses"></select>
-                <span asp-validation-for="Post.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Post.ProductId" class="control-label"></label>
-                <select asp-for="Post.ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
-                <span asp-validation-for="Post.ProductId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+    </main>
 
     <footer class="footer">
         <div class="container">
@@ -54,7 +82,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
 </body>
 </html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-<script src="~/js/site.js"></script>
