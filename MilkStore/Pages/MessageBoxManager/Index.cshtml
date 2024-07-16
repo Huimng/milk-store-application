@@ -1,49 +1,64 @@
 ﻿@page
 @model MilkStore.Pages.MessageBoxManager.IndexModel
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MessageGroup[0].GroupName)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.MessageGroup[0].Status)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.MessageGroup[0].Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MessageGroup[0].Manager)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.MessageGroup) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GroupName)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Manager.Name)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.MessageGroupId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MessageGroupId">Details</a> |
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-<script src="~/js/site.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Store - Message Box Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/messagebox.css">
+
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Index">Home</a></li>
+                    <li><a href="/Products">Products</a></li>
+                    <li><a href="/Posts">Posts</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <h2 class="text-center mb-4">Message Box Manager</h2>
+        <div class="text-center mb-3">
+            <a class="btn btn-primary" asp-page="Create">Create New</a>
+        </div>
+        @foreach (var item in Model.MessageGroup)
+        {
+            <div class="message-box-container">
+                <div class="message-box-header">
+                    @Html.DisplayFor(modelItem => item.GroupName)
+                </div>
+                <div class="message-box-body">
+                    <p><strong>Customer:</strong> @Html.DisplayFor(modelItem => item.Customer.Name)</p>
+                    <p><strong>Manager:</strong> @Html.DisplayFor(modelItem => item.Manager.Name)</p>
+                </div>
+                <div class="message-box-footer">
+                    <a class="btn btn-secondary btn-sm" asp-page="./Edit" asp-route-id="@item.MessageGroupId">Edit</a>
+                    <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.MessageGroupId">Details</a>
+                </div>
+            </div>
+        }
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Baby Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
+</body>
+</html>

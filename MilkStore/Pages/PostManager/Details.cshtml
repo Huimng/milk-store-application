@@ -8,12 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baby Store - Post Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/posts.css">
+    <link rel="stylesheet" href="/css/postmanager.css">
 </head>
 <body>
-    <main class="container">
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/Home">Home</a></li>
+                    <li><a href="/ProductManager">Products</a></li>
+                    <li><a href="/PostManager">Posts</a></li>
+                    <li><a href="/About">About Us</a></li>
+                    <li><a href="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
         <section class="post-section">
-            <h2>Post Details</h2>
+            <h2 class="text-center mb-4">Post Details</h2>
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Post.Title)
@@ -55,11 +70,11 @@
                     Image
                 </dt>
                 <dd class="col-sm-10">
-                    <img src="@Model.Post.Product.UrlImage" alt="Product Image" class="img-fluid" />
+                    <img src="/uploads/@Model.Post.Product.UrlImage" alt="Product Image" class="img-fluid" />
                 </dd>
             </dl>
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
                     <tr>
                         <th>
                             @Html.DisplayNameFor(model => model.Comments[0].Content)
@@ -87,21 +102,25 @@
                                 @Html.DisplayFor(modelItem => item.Post.Title)
                             </td>
                             <td>
-                                <a asp-page="./Delete" asp-route-id="@item.CommentId">Delete</a>
+                                <a asp-page="./Delete" asp-route-id="@item.CommentId" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <h3>Add a comment</h3>
+            <h3 class="mt-4">Add a Comment</h3>
             <form method="post" asp-route-postId="@Model.Post?.PostId">
-                <textarea asp-for="CommentIndex.Content"></textarea>
-                <span asp-validation-for="CommentIndex.Content"></span>
-                <button type="submit">Submit</button>
+                <div class="form-group">
+                    <textarea asp-for="CommentIndex.Content" class="form-control"></textarea>
+                    <span asp-validation-for="CommentIndex.Content" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form>
             <div class="text-center mt-3">
-                <a asp-page="./Edit" asp-route-id="@Model.Post?.PostId" class="btn btn-primary">Edit</a>
-                <a asp-page="./Index" class="btn btn-outline-primary">Back to List</a>
+                <a asp-page="./Edit" asp-route-id="@Model.Post?.PostId" class="btn btn-secondary">Edit</a>
+                <a asp-page="./Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </section>
     </main>
@@ -116,6 +135,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
     <script src="~/js/site.js"></script>
-
 </body>
 </html>

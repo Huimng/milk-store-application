@@ -8,10 +8,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baby Store - Message Group Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/messages.css">
+    <link rel="stylesheet" href="/css/messagebox.css">
 </head>
 <body>
-    <main class="container">
+    <header class="header">
+        <div class="container">
+            <h1>Baby Store</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/Products">Products</a></li>
+                    <li><a asp-page="/Posts">Posts</a></li>
+                    <li><a asp-page="/About">About Us</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
         <section class="message-group-section">
             <h2>Message Group Details</h2>
             <dl class="row">
@@ -34,28 +49,25 @@
                     @Html.DisplayFor(model => model.MessageGroup.Manager.Name)
                 </dd>
             </dl>
-            <div>
+            <div class="messages-section">
                 <h3>Messages</h3>
-                <ul>
+                <ul class="list-group">
                     @foreach (var message in Model.Messages)
                     {
-                        <li>@message.Content</li>
+                        <li class="list-group-item">@message.Content</li>
                     }
                 </ul>
             </div>
-            <div>
+            <div class="new-message-section mt-4">
                 <h3>Create New Message</h3>
                 <form method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
                     <div class="form-group">
                         <label asp-for="NewMessage.Content" class="control-label"></label>
                         <input asp-for="NewMessage.Content" class="form-control" />
                         <span asp-validation-for="NewMessage.Content" class="text-danger"></span>
                     </div>
-                    
-                    
-                    <div class="form-group">
+                    <div class="text-center">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
                 </form>
@@ -77,6 +89,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-<script src="~/js/site.js"></script>
