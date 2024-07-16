@@ -41,6 +41,16 @@ namespace MilkStore.Pages.MessageGroupManager
             }
 
             MessageGroup = messageGroup;
+            string username = Request.Cookies["Username"];
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToPage("/User/Login");
+            }
+            if (!username.Equals(messageGroup.Customer.Username) && !username.Equals(messageGroup.Manager.Username))
+            {
+                return RedirectToPage("/MessageBoxManager/Index");
+            }
             Messages = _messageService.MessageInAGroupMessage(id);
 
             await _hub.Clients.All.SendAsync("Loading");
