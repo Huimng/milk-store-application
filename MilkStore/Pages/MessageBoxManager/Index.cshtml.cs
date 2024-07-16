@@ -27,23 +27,24 @@ namespace MilkStore.Pages.MessageBoxManager
 
         public IList<MessageGroup> MessageGroup { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             if (accountService != null)
             {
-                var username = Request.Cookies["Username"];
-                if (username != null)
+                string username = Request.Cookies["Username"];
+                if (string.IsNullOrEmpty(username))
                 {
-                    Account account = accountService.GetAccountByUserName(username);
-                    
-                        MessageGroup = messageGroupService.GetMessageGroupByAccount(account.AccountId);
-                    
+                    // Hiển thị thông báo
+                    // Chuyển hướng đến trang đăng nhập
+                    return RedirectToPage("/User/Login");
                 }
 
-
+                Account account = accountService.GetAccountByUserName(username);
+                MessageGroup = messageGroupService.GetMessageGroupByAccount(account.AccountId);
             }
 
-
+            return Page();
         }
+
     }
 }
