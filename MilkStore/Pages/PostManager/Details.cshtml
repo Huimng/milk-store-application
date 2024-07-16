@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="/css/posts.css">
 </head>
 <body>
-    
-
     <main class="container">
         <section class="post-section">
             <h2>Post Details</h2>
@@ -41,18 +39,23 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Post.Status)
                 </dd>
-                @* Uncomment if needed *@
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Post.Account)
+                    @Html.DisplayNameFor(model => model.Post.Product.ProductName)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Post.Account)
+                    @Html.DisplayFor(model => model.Post.Product.ProductName)
                 </dd>
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Post.ProductId)
+                    @Html.DisplayNameFor(model => model.Post.Product.Description)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Post.ProductId)
+                    @Html.DisplayFor(model => model.Post.Product.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    Image
+                </dt>
+                <dd class="col-sm-10">
+                    <img src="@Model.Post.Product.UrlImage" alt="Product Image" class="img-fluid" />
                 </dd>
             </dl>
             <table class="table">
@@ -111,7 +114,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
+
 </body>
 </html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-<script src="~/js/site.js"></script>
