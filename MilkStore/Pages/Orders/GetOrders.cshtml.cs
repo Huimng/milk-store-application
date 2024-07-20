@@ -89,6 +89,16 @@ namespace MilkStore.Pages.Orders
 
         public IActionResult OnPostOrderCancel(int orderId)
         {
+            var order = _orderService.GetAllOrder().FirstOrDefault(x => x.OrderId == orderId);
+            if (order == null)
+            {
+                return RedirectToPage("/Orders/GetOrders");
+            }
+
+            foreach(var item in order.OrderDetails)
+            {
+                _productService.AddQuantityProduct(item.ProductId, item.Quantity, order.CreatedDate);
+            }
             _orderService.UpdateOrderCancel(orderId);
             return RedirectToPage("/Orders/GetOrders");
         }

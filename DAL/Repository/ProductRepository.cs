@@ -18,9 +18,10 @@ namespace DAL.Repository
         public void UpdateProduct(Product product);
         public void DeleteProduct(int id);
         public List<Product> GetAllProductStaff();
-        public void UpdateQuantityProduct(int idProduct, int quantity);
+        public void UpdateQuantityProduct(int idProduct, int quantity, DateTime c);
         public void UpdateQuantityFromProductLine(int idProduct, int quantity);
         public List<ProductLineSummary> GetAllExpireDate(int idProduct);
+        public void AddQuantityProduct(int idProduct, int quantity, DateTime c);
     }
     public class ProductRepository : IProductRepository
     {
@@ -184,7 +185,7 @@ namespace DAL.Repository
             }
         }
 
-        public void UpdateQuantityProduct(int idProduct, int quantity)
+        public void UpdateQuantityProduct(int idProduct, int quantity, DateTime createorder)
         {
             using (var context = new BSADBContext())
             {
@@ -223,6 +224,7 @@ namespace DAL.Repository
                         foreach(var line in productLinesToRemove)
                         {
                             line.IsActived = false;
+                            line.DeleteDate = createorder;
                         }
 
                         context.SaveChanges();
@@ -236,7 +238,59 @@ namespace DAL.Repository
                 }
             }
         }
-    
+
+
+        public void AddQuantityProduct(int idProduct, int quantity, DateTime createorder)
+        {
+            using (var context = new BSADBContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var product = context.Set<Product>().Include(p => p.ProductLines).FirstOrDefault(p => p.ProductId == idProduct);
+                        if (product == null)
+                        {
+                            throw new InvalidOperationException($"Product with ID {idProduct} not found.");
+                        }
+
+                        product.Quantity += quantity;
+                        if (product.Quantity != 0)
+                        {
+                            product.Status = ProductStatus.Available;
+                        }
+
+                        var productLinesToAdd = context.Set<ProductLine>()
+                            .Where(pl => pl.ProductId == idProduct && pl.IsActived == false)
+                            .OrderByDescending(pl => pl.ExpireDate)
+                            .ToList();
+
+                        if (productLinesToAdd.Count < quantity)
+                        {
+                            throw new InvalidOperationException("Insufficient product lines available.");
+                        }
+
+                        foreach (var line in productLinesToAdd)
+                        {
+                            if(line.DeleteDate == createorder)
+                            {
+                                line.IsActived = true;
+                            }
+                            
+                        }
+
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
 
         public void UpdateQuantityFromProductLine(int idProduct, int quantity)
         {

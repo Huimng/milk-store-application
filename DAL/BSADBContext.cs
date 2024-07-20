@@ -34,7 +34,12 @@ public partial class BSADBContext : DbContext
         optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
 
-
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    // Configure database provider and connection string
+    //    optionsBuilder.UseNpgsql(
+    //        "Host=localhost;Port=5432;Database=BabyStore;Username=phucvinh;Password=12345;Integrated Security=true;");
+    //}
 
 }
 
@@ -460,6 +465,8 @@ public partial class BSADBContext
             // Column lengths and configurations
             entity.Property(e => e.ExpireDate)
                 .IsRequired();
+            entity.Property(e => e.DeleteDate)
+               .IsRequired();
             entity.Property(e => e.AgeGroup)
                 .IsRequired()
                 .HasMaxLength(125);
