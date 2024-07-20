@@ -141,7 +141,20 @@ namespace MilkStore.Pages.Orders
                 HttpContext.Session.SetObjectAsJson("OrderContact", OrderContact);
                 Response.Redirect("/PaymentOrder");
                 return;
-            }  
+            }
+            foreach (var item in Cart)
+            {
+                var checkproduct = _productService.GetProduct(item.ProductId);
+                if (item.Quantity > checkproduct.Quantity)
+                {
+                    ModelState.AddModelError(string.Empty, "quantity very big");
+                    GetCartInOrder();
+                    Page();
+                    return;
+                }
+                //_orderDetailService.CreateOrderDetail(orderDetail);
+                //_productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
+            }
 
 
             Order.Status = OrderStatus.Pending;
