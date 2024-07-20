@@ -7,5 +7,6 @@ public class ProductLine
     public DateTime ExpireDate { get; set; }
     public string? AgeGroup { get; set; } // "0-6 months", "6-12 months", "1-2 years"
     public bool? IsActived { get; set; }
+    public DateTime? DeleteDate { get; set; }
     public virtual Product? Product { get; set; }
 }

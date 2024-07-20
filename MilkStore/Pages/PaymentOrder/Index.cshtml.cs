@@ -157,7 +157,7 @@ namespace MilkStore.Pages.PaymentOrder
                             orderDetail.UpdatedDate = DateTime.UtcNow;
                             orderDetail.ProductId = item.ProductId;
                             _orderDetailService.CreateOrderDetail(orderDetail);
-                            _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
+                            _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity, Order.CreatedDate);
                         }
 
 

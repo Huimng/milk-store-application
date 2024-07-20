@@ -3,6 +3,7 @@ using System;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(BSADBContext))]
-    partial class BSADBContextModelSnapshot : ModelSnapshot
+    [Migration("20240720163920_UpdateDB_V4_07202024")]
+    partial class UpdateDB_V4_07202024
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,8 +423,7 @@ namespace DAL.Migrations
                         .HasMaxLength(125)
                         .HasColumnType("character varying(125)");
 
-                    b.Property<DateTime?>("DeleteDate")
-                        .IsRequired()
+                    b.Property<DateTime>("DeleteDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("ExpireDate")
