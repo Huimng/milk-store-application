@@ -116,6 +116,16 @@ namespace MilkStore.Pages.PaymentOrder
 
                         //save order in database
 
+                        foreach (var item in Cart)
+                        {
+                            var checkproduct = _productService.GetProduct(item.ProductId);
+                            if(item.Quantity > checkproduct.Quantity)
+                            {
+                                return new JsonResult("");
+                            }
+                            //_orderDetailService.CreateOrderDetail(orderDetail);
+                            //_productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
+                        }
 
                         Order.Status = OrderStatus.Pending;
                         Order.TotalDiscount = 0;
@@ -137,7 +147,6 @@ namespace MilkStore.Pages.PaymentOrder
                         OrderContact.UpdatedDate = DateTime.UtcNow;
                         _orderContactService.CreateOrderContact(OrderContact);
 
-
                         foreach (var item in Cart)
                         {
                             OrderDetail orderDetail = new OrderDetail();
@@ -151,7 +160,8 @@ namespace MilkStore.Pages.PaymentOrder
                             _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
                         }
 
-                       
+
+
 
                     }
                 }
