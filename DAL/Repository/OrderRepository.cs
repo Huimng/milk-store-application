@@ -1,11 +1,5 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
@@ -51,6 +45,7 @@ namespace DAL.Repository
                         orderOld.Address = order.Address;
                         orderOld.OrderContact.Phone = order.OrderContact.Phone;
                         orderOld.Status = order.Status;
+                        context.Set<Order>().Update(orderOld);
                         context.SaveChanges();
                     }
 
@@ -78,6 +73,7 @@ namespace DAL.Repository
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new Exception(ex.Message);
             }
         }
@@ -93,6 +89,7 @@ namespace DAL.Repository
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new Exception(ex.Message);
             }
         }

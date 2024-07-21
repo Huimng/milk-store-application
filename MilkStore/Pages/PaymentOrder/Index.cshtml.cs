@@ -1,10 +1,10 @@
+using System;
 using BusinessLogics.Helpers;
 using BusinessLogics.Services;
 using BusinessObjects;
 using BusinessObjects.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Text.Json.Nodes;
 
@@ -57,44 +57,50 @@ namespace MilkStore.Pages.PaymentOrder
         {
             double TotalPrice = 0;
             Cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
-            foreach (var item in Cart)
-            {
+            Cart.ForEach(item => {
                 TotalPrice += (item.Price * item.Quantity);
-            }
+            });
             Order = HttpContext.Session.GetObjectFromJson<Order>("Order");
             OrderContact = HttpContext.Session.GetObjectFromJson<OrderContact>("OrderContact");
-            Order.Address = OrderContact.HouseNumber + " " + OrderContact.District + " " + OrderContact.Province + " " + OrderContact.City;
+            Order.Address = String.Format("{0} {1} {2} {3}", OrderContact.HouseNumber, OrderContact.District, OrderContact.Province, OrderContact.City);
             Order.GrandTotal = TotalPrice;
             if(Order == null || OrderContact == null)
             {
-                return new JsonResult("");
+                return new JsonResult(String.Empty);
             }
 
             // create the request body
-            JsonObject createOrderRequest = new JsonObject();
-            createOrderRequest.Add("intent", "CAPTURE");
+           
+            JsonObject amount = new()
+            {
+                { "currency_code", "USD" },
+                { "value", Order.GrandTotal }
+            };
 
-            JsonObject amount = new JsonObject();
-            amount.Add("currency_code", "USD");
-            amount.Add("value", Order.GrandTotal);
+            JsonObject purchaseUnit1 = new JsonObject
+            {
+                { "amount", amount }
+            };
 
-            JsonObject purchaseUnit1 = new JsonObject();
-            purchaseUnit1.Add("amount", amount);
-
-            JsonArray purchaseUnits = new JsonArray();
-            purchaseUnits.Add(purchaseUnit1);
-
-            createOrderRequest.Add("purchase_units", purchaseUnits);
+            JsonArray purchaseUnits = new JsonArray
+            {
+                purchaseUnit1
+            };
+            JsonObject createOrderRequest = new()
+            {
+                { "intent", "CAPTURE" },
+                {"purchase_units", purchaseUnits}
+            };
 
             // get access token
-            string accessToken = GetPaypalAccessToken();
-            // send request
-            string url = PaypalUrl + "/v2/checkout/orders";
-
-            string orderId = "";
+            string orderId = String.Empty;
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+                string accessToken = GetPaypalAccessToken();
+                // send request
+                string url = String.Format("{0}{1}", PaypalUrl, "/v2/checkout/orders");
+                
+                client.DefaultRequestHeaders.Add("Authorization", String.Format("Bearer {0}", accessToken));
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
                 requestMessage.Content = new StringContent(createOrderRequest.ToString(), null, "application/json");
@@ -112,16 +118,16 @@ namespace MilkStore.Pages.PaymentOrder
                     var jsonResponse = JsonNode.Parse(strResponse);
                     if(jsonResponse != null)
                     {
-                        orderId = jsonResponse["id"]?.ToString() ?? "";
+                        orderId = jsonResponse["id"]?.ToString() ?? String.Empty;
 
                         //save order in database
 
                         foreach (var item in Cart)
                         {
-                            var checkproduct = _productService.GetProduct(item.ProductId);
-                            if(item.Quantity > checkproduct.Quantity)
+                            var checkProduct = _productService.GetProduct(item.ProductId);
+                            if(item.Quantity > checkProduct.Quantity)
                             {
-                                return new JsonResult("");
+                                return new JsonResult(String.Empty);
                             }
                             //_orderDetailService.CreateOrderDetail(orderDetail);
                             //_productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
@@ -132,7 +138,7 @@ namespace MilkStore.Pages.PaymentOrder
                         Order.SubTotal = 0;
                         Order.GrandTotal = TotalPrice;
                         Order.CartId = 0;
-                        Order.Address = OrderContact.HouseNumber + " " + OrderContact.District + " " + OrderContact.Province + " " + OrderContact.City;
+                        Order.Address = String.Format("{0} {1} {2} {3}", OrderContact.HouseNumber, OrderContact.District, OrderContact.Province, OrderContact.City);
                         Order.CreatedDate = DateTime.UtcNow;
                         Order.UpdatedDate = DateTime.UtcNow;
                         var accountIdClaim = User.Claims.FirstOrDefault(c => c.Type == "AccountId");
@@ -149,47 +155,38 @@ namespace MilkStore.Pages.PaymentOrder
 
                         foreach (var item in Cart)
                         {
-                            OrderDetail orderDetail = new OrderDetail();
-                            orderDetail.OrderId = order.OrderId;
-                            orderDetail.Quantity = item.Quantity;
-                            orderDetail.TotalPrice = item.Price * item.Quantity;
-                            orderDetail.CreatedDate = DateTime.UtcNow;
-                            orderDetail.UpdatedDate = DateTime.UtcNow;
-                            orderDetail.ProductId = item.ProductId;
+                            OrderDetail orderDetail = new() {
+                                OrderId = order.OrderId,
+                                Quantity = item.Quantity,
+                                TotalPrice = item.Price * item.Quantity,
+                                CreatedDate = DateTime.UtcNow,
+                                UpdatedDate = DateTime.UtcNow,
+                                ProductId = item.ProductId,
+                            };
                             _orderDetailService.CreateOrderDetail(orderDetail);
                             _productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity, Order.CreatedDate);
                         }
-
-
-
-
                     }
                 }
             }
-
-
-
-                var response = new
-                {
-                Id = orderId
-                };
-            return new JsonResult(response);
+                
+            return new JsonResult( new {Id = orderId});
         }
 
         public JsonResult OnPostCompleteOrder([FromBody] JsonObject data)
         {
-                if(data ==null || data["orderID"]==null) return new JsonResult("");
+                if(data ==null || data["orderID"]==null) return new JsonResult(String.Empty);
                 var orderID = data["orderID"]!.ToString();
 
             // get access token
             string accessToken = GetPaypalAccessToken();
-            string url = PaypalUrl + "/v2/checkout/orders/" + orderID + "/capture";
+            string url = String.Format("{0}/v2/checkout/orders/{1}/capture", PaypalUrl, orderID);
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+                client.DefaultRequestHeaders.Add("Authorization", String.Format("Bearer {0}", accessToken));
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
-                requestMessage.Content = new StringContent("", null, "application/json");
+                requestMessage.Content = new StringContent(String.Empty, null, "application/json");
 
                 var responseTask = client.SendAsync(requestMessage);
                 responseTask.Wait();
@@ -216,14 +213,14 @@ namespace MilkStore.Pages.PaymentOrder
                 }
             }
 
-                return new JsonResult("");
+                return new JsonResult(String.Empty);
         }
 
         public JsonResult OnPostCancelOrder([FromBody] JsonObject data)
         {
-            if (data == null || data["orderID"] == null) return new JsonResult("");
-            var orderID = data["orderID"]!.ToString();
-            return new JsonResult("");
+            if (data == null || data["orderID"] == null) return new JsonResult(String.Empty);
+            
+            return new JsonResult(String.Empty);
         }
 
         private string GetPaypalAccessToken()
@@ -253,7 +250,7 @@ namespace MilkStore.Pages.PaymentOrder
                     var jsonResponse = JsonNode.Parse(strResponse);
                     if (jsonResponse != null)
                     {
-                        accessToken = jsonResponse["access_token"]?.ToString() ?? "";
+                        accessToken = jsonResponse["access_token"]?.ToString() ?? String.Empty;
                     }
                 }
             }

@@ -26,25 +26,6 @@ namespace DAL.Repository
     }
     public class AccountRepository : IAccountRepository
     {
-        ////using singleton pattern
-        //private static AccountRepository instance = null;
-        //public static readonly object instanceLock = new object();
-        //private AccountRepository() { }
-        //public static AccountRepository Instance
-        //{
-        //    get
-        //    {
-        //        lock (instanceLock)
-        //        {
-        //            if (instance == null)
-        //            {
-        //                instance = new AccountRepository();
-        //            }
-        //            return instance;
-        //        }
-        //    }
-        //}
-        ////------------------------------------------
 
         public void AddAccount(Account account)
         {
