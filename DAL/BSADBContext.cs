@@ -24,22 +24,22 @@ public partial class BSADBContext : DbContext
     public DbSet<ProductFeedback> ProductFeedbacks { get; set; }
     public DbSet<ProductLine> ProductLines { get; set; }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     var connectstring = new ConfigurationBuilder()
-    //         .SetBasePath(Directory.GetCurrentDirectory())
-    //         .AddJsonFile("appsettings.json")
-    //         .Build();
-    //
-    //     optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
-    // }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Configure database provider and connection string
-        optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=17011206;Integrated Security=true;");
+        var connectstring = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+    
+        optionsBuilder.UseNpgsql(connectstring.GetConnectionString("DefaultConnectStrings"));
     }
+
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     // Configure database provider and connection string
+    //     optionsBuilder.UseNpgsql(
+    //         "Host=localhost;Port=5432;Database=BabyStore;Username=postgres;Password=;Integrated Security=true;");
+    // }
 
 }
 
