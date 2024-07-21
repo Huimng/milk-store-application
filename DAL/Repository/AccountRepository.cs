@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repository
 {
@@ -117,24 +118,30 @@ namespace DAL.Repository
             {
                 using (var context = new BSADBContext())
                 {
+                    // Retrieve the existing account from the database
                     Account accountOld = context.Set<Account>().FirstOrDefault(x => x.AccountId == account.AccountId);
                     if (accountOld != null)
                     {
                         accountOld.Name = account.Name;
                         accountOld.Email = account.Email;
-                        accountOld.Username = account.Username;
                         accountOld.Password = account.Password;
                         accountOld.Status = account.Status;
                         accountOld.UpdateDate = DateTime.UtcNow;
+
+                        context.Entry(accountOld).State = EntityState.Modified;
                         context.SaveChanges();
                     }
+                    else
+                    {
+                        throw new Exception("Account not found");
+                    }
                 }
-
-                }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            }
+        }
 
         public void DeleteAccount(int id)
         {
