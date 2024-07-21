@@ -95,7 +95,7 @@ namespace MilkStore.Pages.ProductManager
                     }
                 }
 
-                ProductLineSummaries = productLinesArray.ToList();
+                ProductLineSummaries = productLinesArray.OrderBy(x=>x.ExpireDate).ToList();
 
                Product = product;
             }
@@ -151,7 +151,7 @@ namespace MilkStore.Pages.ProductManager
                 }
             }
 
-            ProductLineSummaries = productLinesArray.ToList();
+            ProductLineSummaries = productLinesArray.OrderBy(x => x.ExpireDate).ToList();
 
             Product = product;
         }

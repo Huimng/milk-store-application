@@ -20,7 +20,7 @@
             <h1>Baby Store</h1>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="/Index">Home</a></li>
+                    <li><a href="/Home/Product">Home</a></li>
                     <li><a href="/Products">Products</a></li>
                     <li><a href="/Posts">Posts</a></li>
                     <li><a href="/About">About Us</a></li>
@@ -36,6 +36,7 @@
             <h4>Account Details</h4>
             <hr />
             <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label for="Name">Name</label>
                     <input type="text" class="form-control" id="Name" name="Account.Name" value="@Model.Account.Name" required>
@@ -47,14 +48,6 @@
                 <div class="form-group">
                     <label for="Password">Password</label>
                     <input type="password" class="form-control" id="Password" name="Account.Password" value="@Model.Account.Password" required>
-                </div>
-                <div class="form-group">
-                    <label for="Role">Role</label>
-                    <input type="text" class="form-control" id="Role" name="Account.Role" value="@Model.Account.Role" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="Status">Status</label>
-                    <input type="checkbox" class="form-control" id="Status" name="Account.Status" @(Model.Account.Status ? "checked" : "")>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
