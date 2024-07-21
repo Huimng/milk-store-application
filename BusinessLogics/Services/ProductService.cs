@@ -22,6 +22,7 @@ namespace BusinessLogics.Services
         public void UpdateQuantityFromProductLine(int idProduct, int quantity);
         public List<ProductLineSummary> GetAllExpireDate(int idProduct);
         public void AddQuantityProduct(int idProduct, int quantity, DateTime c);
+        public Product GetProductById(int id);
     }
     public class ProductService: IProductService
     {
@@ -42,5 +43,7 @@ namespace BusinessLogics.Services
         public void UpdateQuantityFromProductLine(int idProduct, int quantity) => _productRepository.UpdateQuantityFromProductLine(idProduct, quantity);
         public List<ProductLineSummary> GetAllExpireDate(int idProduct) => _productRepository.GetAllExpireDate(idProduct);
         public void AddQuantityProduct(int idProduct, int quantity, DateTime c) => _productRepository.AddQuantityProduct(idProduct, quantity, c);
+
+        public Product GetProductById(int id) => _productRepository.GetProductById(id); 
     }
 }

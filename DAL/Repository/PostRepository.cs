@@ -25,6 +25,10 @@ namespace DAL.Repository
                 throw new Exception(ex.Message);
             }
         }
+        public List<Post> GetPostByCreateBy(int id)
+        {
+            return dbContext.Set<Post>().Include(p => p.Product).Where(x => x.CreateBy == id).ToList();
+        }
 
         public Post? GetPost(int id)
         {

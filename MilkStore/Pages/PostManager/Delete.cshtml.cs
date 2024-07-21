@@ -10,6 +10,7 @@ using DAL;
 using BusinessLogics.Services;
 using Microsoft.AspNetCore.SignalR;
 using MilkStore.Hubs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MilkStore.Pages.PostManager
 {
@@ -17,10 +18,13 @@ namespace MilkStore.Pages.PostManager
     {
         private PostService postService;
         private readonly IHubContext<ChatHub> _hub;
-        public DeleteModel(IHubContext<ChatHub> hub)
+        private readonly IAccountService _accountService;
+
+        public DeleteModel(IServiceProvider serviceProvider, IHubContext<ChatHub> hub)
         {
             postService = new PostService();
             _hub = hub;
+            _accountService = serviceProvider.GetRequiredService<IAccountService>();
         }
 
         [BindProperty]
@@ -28,12 +32,19 @@ namespace MilkStore.Pages.PostManager
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            string username = Request.Cookies["Username"];
+
+            var user = _accountService.GetAccountByUserName(username);
+            var post = postService.GetPost(id);
+            if (user.AccountId != post.CreateBy)
+                return RedirectToPage("/PostManager/Index");
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var post = postService.GetPost(id);
+            
 
             if (post == null)
             {
@@ -48,11 +59,13 @@ namespace MilkStore.Pages.PostManager
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null)
+            string username = Request.Cookies["Username"];
+
+            if (string.IsNullOrEmpty(username))
             {
-                return NotFound();
+                RedirectToPage("/User/Login");
             }
-            
+
 
             if (Post != null)
             {

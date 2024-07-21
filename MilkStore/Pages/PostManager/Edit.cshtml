@@ -44,16 +44,16 @@
                         <input id="Post_Contents" name="Post.Contents" class="form-control" />
                         <span asp-validation-for="Post.Contents" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    @* <div class="form-group">
                         <label for="Post_CreateDate" class="control-label">Create Date</label>
                         <input id="Post_CreateDate" name="Post.CreateDate" class="form-control" type="datetime" disabled />
                         <span asp-validation-for="Post.CreateDate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
+                    </div> *@
+                    @* <div class="form-group">
                         <label for="Post_CreateBy" class="control-label">Created By</label>
                         <select id="Post_CreateBy" name="Post.CreateBy" class="form-control" asp-items="ViewBag.CreateBy" disabled></select>
                         <span asp-validation-for="Post.CreateBy" class="text-danger"></span>
-                    </div>
+                    </div> *@
                     <div class="form-group">
                         <label for="Post_Status" class="control-label">Status</label>
                         <select id="Post_Status" name="Post.Status" class="form-control" asp-items="ViewBag.PostStatuses"></select>

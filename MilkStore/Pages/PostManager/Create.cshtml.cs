@@ -53,7 +53,14 @@ namespace MilkStore.Pages.PostManager
             {
                 return Page();
             }
-            var username = Request.Cookies["Username"];
+            string username = Request.Cookies["Username"];
+
+            if (string.IsNullOrEmpty(username))
+            {
+                RedirectToPage("/User/Login");
+            }
+            
+            
             int id = _accountService.GetAccountByUserName(username).AccountId;
             Post.CreateBy = id;
             Post.Status = PostStatuses.Pending;

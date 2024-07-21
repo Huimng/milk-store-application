@@ -34,8 +34,7 @@ namespace MilkStore.Pages.MessageBoxManager
                 string username = Request.Cookies["Username"];
                 if (string.IsNullOrEmpty(username))
                 {
-                    // Hiển thị thông báo
-                    // Chuyển hướng đến trang đăng nhập
+                    
                     return RedirectToPage("/User/Login");
                 }
 

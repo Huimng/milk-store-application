@@ -31,20 +31,22 @@ namespace MilkStore.Pages.PostManager
 
         public List<Post> ListPost { get;set; } = default;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (postService != null)
+            if (_accountService != null)
             {
-                await _hub.Clients.All.SendAsync("Loading");
-                ListPost = postService.GetPosts();
-                foreach (Post post in ListPost)
+                string username = Request.Cookies["Username"];
+                if (string.IsNullOrEmpty(username))
                 {
-                    post.Account = _accountService.GetAccount(post.CreateBy);
-                    post.Product = _productService.GetProduct(post.ProductId);
-                    
+
+                    return RedirectToPage("/User/Login");
                 }
+
+                Account account = _accountService.GetAccountByUserName(username);
+                ListPost = postService.GetPosts();
             }
-            await _hub.Clients.All.SendAsync("Loading");
+
+            return Page();
         }
     }
 }

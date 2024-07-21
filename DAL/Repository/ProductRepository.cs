@@ -22,6 +22,7 @@ namespace DAL.Repository
         public void UpdateQuantityFromProductLine(int idProduct, int quantity);
         public List<ProductLineSummary> GetAllExpireDate(int idProduct);
         public void AddQuantityProduct(int idProduct, int quantity, DateTime c);
+        public Product GetProductById(int id);
     }
     public class ProductRepository : IProductRepository
     {
@@ -94,19 +95,26 @@ namespace DAL.Repository
 
         public Product GetProduct(int id)
         {
-            try
-            {
+            
                 using (var context = new BSADBContext())
                 {
                     var _product = context.Set<Product>().Include(x=>x.ProductLines).FirstOrDefault(x => x.ProductId == id);
 
                     return _product;
                 }
-            }
-            catch (Exception ex)
+            
+        }
+
+        public Product GetProductById(int id)
+        {
+
+            using (var context = new BSADBContext())
             {
-                throw new Exception(ex.Message);
+                var product = context.Set<Product>().FirstOrDefault(x => x.ProductId == id);
+
+                return product;
             }
+
         }
 
         public void CreateProduct(Product product)

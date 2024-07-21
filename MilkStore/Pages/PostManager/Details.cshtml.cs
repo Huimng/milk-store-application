@@ -16,7 +16,7 @@ namespace MilkStore.Pages.PostManager
     {
         private readonly PostService postService;
         private readonly IProductService _productService;
-        private readonly IAccountService accountService;
+        private readonly IAccountService _accountService;
         private readonly CommentService commentService;
         private readonly IHubContext<ChatHub> _hub;
 
@@ -24,7 +24,7 @@ namespace MilkStore.Pages.PostManager
         {
             postService = new PostService();
             _productService = serviceProvider.GetRequiredService<IProductService>();
-            accountService = serviceProvider.GetRequiredService<IAccountService>();
+            _accountService = serviceProvider.GetRequiredService<IAccountService>();
             commentService = new CommentService();
             _hub = hub;
         }
@@ -36,12 +36,19 @@ namespace MilkStore.Pages.PostManager
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            string username = Request.Cookies["Username"];
+
+            if (string.IsNullOrEmpty(username))
+            {
+                RedirectToPage("/User/Login");
+            }
+            
             var post = postService.GetPost(id);
             if (post == null)
             {
                 return NotFound();
             }
-            post.Product = _productService.GetProduct(post.ProductId);
+            post.Product = _productService.GetProductById(post.ProductId);
 
             Post = post;
             Comments = commentService.CommentInAPost(id);
@@ -56,6 +63,14 @@ namespace MilkStore.Pages.PostManager
 
         public async Task<IActionResult> OnPostAsync(int postId)
         {
+            string username = Request.Cookies["Username"];
+
+            if (string.IsNullOrEmpty(username))
+            {
+                RedirectToPage("/User/Login");
+            }
+            if (_accountService.GetAccountByUserName(username).AccountId != Post.CreateBy)
+                RedirectToPage("/Index");
             if (!ModelState.IsValid)
             {
                 var post = postService.GetPost(postId);

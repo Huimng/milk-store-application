@@ -38,7 +38,12 @@ namespace MilkStore.Pages.PostManager
             {
                 return NotFound();
             }
+            string username = Request.Cookies["Username"];
 
+            var user = _accountService.GetAccountByUserName(username);
+            var post = postService.GetPost(id);
+            if (user.AccountId != post.CreateBy)
+                return RedirectToPage("/PostManager/Index");
             Post = postService.GetPost(id);
             if (Post == null)
             {
@@ -60,7 +65,14 @@ namespace MilkStore.Pages.PostManager
             {
                 return Page();
             }
+            string username = Request.Cookies["Username"];
 
+            if (string.IsNullOrEmpty(username))
+            {
+                RedirectToPage("/User/Login");
+            }
+            if (_accountService.GetAccountByUserName(username).AccountId != Post.CreateBy)
+                RedirectToPage("/Index");
             try
             {
                 // Ensure the CreateDate is set correctly
@@ -83,7 +95,6 @@ namespace MilkStore.Pages.PostManager
                     }
                    
                 }
-                var username = Request.Cookies["Username"];
                 int id = _accountService.GetAccountByUserName(username).AccountId;
                 if (existingPost.CreateBy != id)
                 {
