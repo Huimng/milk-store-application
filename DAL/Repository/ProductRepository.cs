@@ -92,17 +92,21 @@ namespace DAL.Repository
                 throw new Exception(ex.Message);
             }
         }
-
         public Product GetProduct(int id)
         {
-            
+            try
+            {
                 using (var context = new BSADBContext())
                 {
-                    var _product = context.Set<Product>().Include(x=>x.ProductLines).FirstOrDefault(x => x.ProductId == id);
+                    var _product = context.Set<Product>().Include(x => x.ProductLines).FirstOrDefault(x => x.ProductId == id);
 
                     return _product;
                 }
-            
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public Product GetProductById(int id)
