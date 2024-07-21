@@ -125,7 +125,6 @@ namespace DAL.Repository
                         accountOld.Name = account.Name;
                         accountOld.Email = account.Email;
                         accountOld.Password = account.Password;
-                        accountOld.Status = account.Status;
                         accountOld.UpdateDate = DateTime.UtcNow;
 
                         context.Entry(accountOld).State = EntityState.Modified;

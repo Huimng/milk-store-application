@@ -38,8 +38,11 @@ public class UserProfile : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
+
+        var checkaccount = _accountService.GetAccounts().Where(x => x.Email == Account.Email).FirstOrDefault();
+        if (checkaccount != null)
         {
+            ModelState.AddModelError(string.Empty, "Invalid email existed.");
             return Page();
         }
 
@@ -60,7 +63,6 @@ public class UserProfile : PageModel
         accountToUpdate.Name = Account.Name;
         accountToUpdate.Email = Account.Email;
         accountToUpdate.Password = Account.Password;
-        accountToUpdate.Status = Account.Status;
         accountToUpdate.UpdateDate = DateTime.UtcNow;
         
         _accountService.UpdateAccount(accountToUpdate);
