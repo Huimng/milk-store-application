@@ -37,7 +37,7 @@ public class UserProfile : PageModel
     }
 
     public async Task<IActionResult> OnPostAsync()
-    {
+    { 
 
         var checkaccount = _accountService.GetAccounts().Where(x => x.Email == Account.Email).FirstOrDefault();
         if (checkaccount != null)
