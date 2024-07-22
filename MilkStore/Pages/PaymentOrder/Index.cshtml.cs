@@ -50,7 +50,7 @@ namespace MilkStore.Pages.PaymentOrder
             Order = HttpContext.Session.GetObjectFromJson<Order>("Order");           
             OrderContact = HttpContext.Session.GetObjectFromJson<OrderContact>("OrderContact");
             Order.Address =OrderContact.HouseNumber + " " + OrderContact.District + " " + OrderContact.Province + " " + OrderContact.City;
-            Order.GrandTotal = TotalPrice;
+            Order.GrandTotal = Math.Round(TotalPrice,5);
         }
 
         public JsonResult OnPostCreateOrder()
@@ -64,7 +64,7 @@ namespace MilkStore.Pages.PaymentOrder
             Order = HttpContext.Session.GetObjectFromJson<Order>("Order");
             OrderContact = HttpContext.Session.GetObjectFromJson<OrderContact>("OrderContact");
             Order.Address = OrderContact.HouseNumber + " " + OrderContact.District + " " + OrderContact.Province + " " + OrderContact.City;
-            Order.GrandTotal = TotalPrice;
+            Order.GrandTotal = Math.Round(TotalPrice, 5); 
             if(Order == null || OrderContact == null)
             {
                 return new JsonResult("");
@@ -127,10 +127,10 @@ namespace MilkStore.Pages.PaymentOrder
                             //_productService.UpdateQuantityProduct(orderDetail.ProductId, orderDetail.Quantity);
                         }
 
-                        Order.Status = OrderStatus.Pending;
+                        Order.Status = OrderStatus.Delivering;
                         Order.TotalDiscount = 0;
                         Order.SubTotal = 0;
-                        Order.GrandTotal = TotalPrice;
+                        Order.GrandTotal = Math.Round(TotalPrice, 5);
                         Order.CartId = 0;
                         Order.Address = OrderContact.HouseNumber + " " + OrderContact.District + " " + OrderContact.Province + " " + OrderContact.City;
                         Order.CreatedDate = DateTime.UtcNow;
@@ -141,7 +141,7 @@ namespace MilkStore.Pages.PaymentOrder
                             Order.AccountId = accountId;
                         }
                         var order = _orderService.CreateOrder(Order);
-
+                        HttpContext.Session.SetInt32(orderId, order.OrderId);
                         OrderContact.OrderId = order.OrderId;
                         OrderContact.CreatedDate = DateTime.UtcNow;
                         OrderContact.UpdatedDate = DateTime.UtcNow;
@@ -223,6 +223,14 @@ namespace MilkStore.Pages.PaymentOrder
         {
             if (data == null || data["orderID"] == null) return new JsonResult("");
             var orderID = data["orderID"]!.ToString();
+            var dbOrderId = (int)HttpContext.Session.GetInt32(orderID);
+            var order = _orderService.GetAllOrder().FirstOrDefault(x => x.OrderId == dbOrderId);
+            foreach (var item in order.OrderDetails)
+            {
+                _productService.AddQuantityProduct(item.ProductId, item.Quantity, order.CreatedDate);
+            }
+            _orderService.UpdateOrderCancel(dbOrderId);
+
             return new JsonResult("");
         }
 
