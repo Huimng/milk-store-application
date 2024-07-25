@@ -187,6 +187,7 @@ namespace MilkStore.Pages.ProductManager
                 productLine.ProductId = productId;
                 productLine.ExpireDate = DateTime.SpecifyKind(ProductLine.ExpireDate, DateTimeKind.Utc).ToUniversalTime();
                 productLine.AgeGroup = ProductLine.AgeGroup;
+                productLine.DeleteDate = DateTime.SpecifyKind(ProductLine.ExpireDate, DateTimeKind.Utc).ToUniversalTime();
                 productLineService.AddProductLIne(productLine);
 
             }

@@ -123,8 +123,8 @@ namespace DAL.Repository
                     if (accountOld != null)
                     {
                         accountOld.Name = account.Name;
-                        accountOld.Email = account.Email;
-                        accountOld.Password = account.Password;
+/*                        accountOld.Email = account.Email;
+*/                        accountOld.Password = account.Password;
                         accountOld.UpdateDate = DateTime.UtcNow;
 
                         context.Entry(accountOld).State = EntityState.Modified;

@@ -30,7 +30,18 @@ namespace MilkStore.Pages.MessageBoxManager
 
         public IActionResult OnGet()
         {
-        ViewData["CustomerId"] = new SelectList(accountService.GetAccounts(), "AccountId", "Name");
+            string username = Request.Cookies["Username"];
+            var user = accountService.GetAccountByUserName(username);
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToPage("/User/Login");
+            }
+            if (user.Role != AccountRoles.Member)
+            {
+                return RedirectToPage("/MessageBoxManager/Index");
+            }
+
+            ViewData["CustomerId"] = new SelectList(accountService.GetAlllAccountStaff(), "AccountId", "Name");
             return Page();
         }
 
@@ -48,6 +59,7 @@ namespace MilkStore.Pages.MessageBoxManager
 
             var username = Request.Cookies["Username"];
             int id = accountService.GetAccountByUserName(username).AccountId;
+
             MessageGroup.ManagerId = id;
 
             MessageGroup.Status = MessageStatuses.Opened;
