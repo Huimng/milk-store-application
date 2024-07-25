@@ -11,9 +11,11 @@ using BusinessLogics.Services;
 using Microsoft.AspNetCore.SignalR;
 using MilkStore.Hubs;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MilkStore.Pages.PostManager
 {
+    [Authorize(Roles = "Staff")]
     public class DeleteModel : PageModel
     {
         private PostService postService;

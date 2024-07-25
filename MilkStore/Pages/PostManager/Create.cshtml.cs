@@ -13,9 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.SignalR;
 using MilkStore.Hubs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MilkStore.Pages.PostManager
 {
+    [Authorize(Roles = "Staff")]
     public class CreateModel : PageModel
     {
         private PostService postService;
@@ -38,7 +40,7 @@ namespace MilkStore.Pages.PostManager
         public IActionResult OnGet()
         {
             ViewData["CreateBy"] = new SelectList(_accountService.GetAccounts(), "AccountId", "Name");
-            ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "Brand");
+            ViewData["ProductId"] = new SelectList(_productService.GetAllProduct(), "ProductId", "ProductName");
             return Page();
         }
 

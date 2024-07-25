@@ -12,9 +12,11 @@ using BusinessLogics.Services;
 using DAL.Repository;
 using Microsoft.AspNetCore.SignalR;
 using MilkStore.Hubs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MilkStore.Pages.PostManager
 {
+    [Authorize(Roles = "Staff")]
     public class EditModel : PageModel
     {
         private PostService postService;
